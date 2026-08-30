@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Налоги 2026 — калькулятор и календарь для ИП и ООО</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A1712; --paper:#FAF8F4; --surface:#F6EFE0; --surface-2:#EFE4CB;
+  --line:#E9DDC1; --muted:#726A57; --accent:#EA4E1B; --accent-dark:#C23D14;
+  --good:#1E9E70; --good-bg:rgba(30,158,112,.09);
+  --warn:#B5730A; --warn-bg:rgba(181,115,10,.1); --warn-line:rgba(181,115,10,.3);
+  --blue:#2B4CF0; --blue-bg:rgba(43,76,240,.08);
+  --violet:#6B3FA0; --violet-bg:rgba(107,63,160,.09);
+  --radius:14px; --shadow:0 1px 2px rgba(20,16,24,.04),0 10px 34px rgba(20,16,24,.07);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Onest',system-ui,sans-serif;color:var(--ink);
+  background:radial-gradient(1200px 600px at 85% -10%,#fff 0%,transparent 60%),linear-gradient(180deg,#FAF8F4,#F3EBDA);
+  background-attachment:fixed;min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header{padding:26px 0 8px}
+.brandbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.wordmark{display:flex;align-items:center;gap:11px;font-family:'Unbounded','Onest',sans-serif;font-weight:800;font-size:19px;letter-spacing:-.01em}
+.rk{width:30px;height:30px;border-radius:9px;background:var(--accent);flex:none;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(234,78,27,.3)}
+.wordmark small{font-family:'Onest';font-weight:500;color:var(--muted);font-size:13px;letter-spacing:0;text-transform:lowercase}
+.privacy{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--good);background:var(--good-bg);border:1px solid rgba(30,158,112,.2);padding:6px 11px;border-radius:999px;font-weight:600}
+.privacy .dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 0 3px rgba(30,158,112,.18)}
+.lead{margin:18px 0 4px;max-width:660px}
+.lead h1{font-family:'Unbounded','Onest',sans-serif;font-weight:800;font-size:clamp(26px,4vw,38px);line-height:1.05;letter-spacing:-.02em;margin:0 0 10px}
+.lead p{margin:0;color:var(--muted);font-size:15.5px}
+.upd{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:600;color:var(--accent-dark);background:rgba(234,78,27,.08);border:1px solid rgba(234,78,27,.2);padding:5px 11px;border-radius:999px}
+
+.tabs{display:flex;gap:6px;margin:24px 0 18px;background:var(--surface);padding:6px;border-radius:13px;border:1px solid var(--line);width:fit-content;max-width:100%}
+.tab{appearance:none;border:0;background:transparent;font-family:inherit;font-weight:600;font-size:14px;color:var(--muted);padding:9px 18px;border-radius:9px;cursor:pointer;transition:.15s;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff;box-shadow:var(--shadow)}
+
+.view{display:none}
+.view.on{display:block}
+
+/* ── calculator ── */
+.calc-grid{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:22px;align-items:start;padding-bottom:60px}
+@media(max-width:880px){.calc-grid{grid-template-columns:1fr}}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+.fgroup{margin-bottom:17px}
+.fgroup:last-child{margin-bottom:0}
+.flabel{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px;letter-spacing:.01em}
+.seg{display:flex;gap:5px;background:var(--surface);padding:5px;border-radius:11px;border:1px solid var(--line);flex-wrap:wrap}
+.seg button{appearance:none;border:0;background:transparent;font-family:inherit;font-weight:600;font-size:13.5px;color:var(--muted);padding:9px 13px;border-radius:8px;cursor:pointer;transition:.15s;flex:1;white-space:nowrap}
+.seg button:hover:not(:disabled){color:var(--ink)}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.seg button:disabled{opacity:.35;cursor:not-allowed}
+.seg.modes button{flex:none}
+input[type=number],input[type=text]{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 13px;transition:.15s}
+input:focus{outline:none;border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(234,78,27,.12)}
+.inwrap{position:relative}
+.inwrap .suf{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}
+.inwrap input{padding-right:34px}
+.hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45}
+.check{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:14px;font-weight:500;padding:11px 13px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.check input{width:18px;height:18px;accent-color:var(--accent);cursor:pointer}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* result */
+.result{position:sticky;top:18px}
+.headline{background:linear-gradient(135deg,var(--ink),#2a2434);color:#fff;border-radius:var(--radius);padding:26px 26px 22px;box-shadow:0 14px 40px rgba(20,16,24,.22);position:relative;overflow:hidden}
+.headline::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(234,78,27,.45),transparent 70%)}
+.headline .cap{font-size:13px;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:8px;position:relative}
+.headline .big{font-family:'Unbounded','Onest',sans-serif;font-weight:800;font-size:clamp(34px,6vw,52px);line-height:1;letter-spacing:-.02em;position:relative}
+.headline .sub{margin-top:12px;display:flex;gap:18px;flex-wrap:wrap;font-size:13px;position:relative}
+.headline .sub b{font-weight:700}
+.headline .sub span{color:rgba(255,255,255,.7)}
+.breakdown{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:8px 20px;margin-top:14px}
+.bline{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.bline:last-child{border-bottom:0}
+.bline .v{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bline.minus .v{color:var(--good)}
+.bline.head{font-weight:700}
+.bline.total{font-weight:800;font-size:15px}
+.bline.total .v{color:var(--accent-dark)}
+.note{display:flex;gap:10px;padding:12px 14px;border-radius:11px;font-size:13px;line-height:1.5;margin-top:11px;border:1px solid}
+.note.ok{background:var(--good-bg);border-color:rgba(30,158,112,.22);color:#155c3d}
+.note.warn{background:var(--warn-bg);border-color:var(--warn-line);color:#7a560f}
+.note.info{background:var(--blue-bg);border-color:rgba(43,76,240,.22);color:#274c8f}
+.note .ic{flex:none;font-weight:800}
+
+/* ── calendar ── */
+.cal-controls{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.ribbon{display:flex;gap:4px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:7px;box-shadow:var(--shadow);overflow-x:auto;margin-bottom:24px}
+.mchip{appearance:none;border:0;background:transparent;font-family:inherit;font-weight:600;font-size:13px;color:var(--muted);padding:9px 6px;border-radius:8px;cursor:pointer;flex:1;min-width:46px;transition:.15s;position:relative}
+.mchip:hover{background:var(--surface);color:var(--ink)}
+.mchip.has::after{content:"";position:absolute;left:50%;bottom:4px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.mchip.empty{opacity:.4}
+.mchip[aria-current="true"]{background:var(--ink);color:#fff}
+.mchip[aria-current="true"]::after{background:#fff}
+.toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink);user-select:none}
+.toggle input{width:17px;height:17px;accent-color:var(--accent);cursor:pointer}
+.seg.who{background:var(--surface);padding:5px;border-radius:11px;border:1px solid var(--line);display:inline-flex}
+.seg.who button{flex:none;padding:8px 16px;font-size:13.5px}
+
+.month{margin-bottom:26px;scroll-margin-top:14px}
+.mhead{display:flex;align-items:baseline;gap:10px;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.mhead h3{font-family:'Unbounded','Onest',sans-serif;font-weight:700;font-size:18px;margin:0;letter-spacing:-.01em}
+.mhead .cnt{font-size:12.5px;color:var(--muted);font-weight:600}
+.ev{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:9px;box-shadow:0 1px 2px rgba(20,16,24,.03)}
+.ev .day{text-align:center;border-right:1px solid var(--line);padding-right:12px}
+.ev .day .d{font-family:'Unbounded','Onest',sans-serif;font-weight:700;font-size:22px;line-height:1}
+.ev .day .mo{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
+.ev .body .t{font-weight:700;font-size:14.5px;margin-bottom:4px}
+.ev .body .n{font-size:12.5px;color:var(--muted);line-height:1.45}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:3px 8px;border-radius:6px;margin-bottom:6px}
+.tag.usn{background:rgba(234,78,27,.1);color:var(--accent-dark)}
+.tag.vznosy{background:var(--good-bg);color:#155c3d}
+.tag.nds{background:var(--warn-bg);color:#7a560f}
+.tag.emp{background:var(--violet-bg);color:#583288}
+.recur{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:14px 16px;margin-bottom:9px;font-size:13px;color:var(--muted);line-height:1.5}
+.recur b{color:var(--ink)}
+.empty-cal{text-align:center;color:var(--muted);padding:40px;font-size:14px}
+
+/* режим встраивания в кабинет: без дублирующей шапки и футера */
+html.embed .brandbar,html.embed .lead,html.embed .funnel{display:none}
+html.embed header{padding:14px 0 4px}
+html.embed .foot .wrap{padding:18px 20px 24px}
+
+/* footer */
+.foot{border-top:1px solid var(--line);background:rgba(255,255,255,.5);margin-top:10px}
+.foot .wrap{padding:30px 20px 40px}
+.funnel{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+@media(max-width:680px){.funnel{grid-template-columns:1fr}.row2{grid-template-columns:1fr}}
+.fcard{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;transition:.15s}
+.fcard:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+.fcard .k{font-weight:700;font-size:14.5px;margin-bottom:3px}
+.fcard .v{font-size:12.5px;color:var(--muted)}
+.disc{font-size:12px;color:var(--muted);line-height:1.55;max-width:780px}
+.disc b{color:var(--ink)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brandbar">
+    <div class="wordmark"><span class="rk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.5 7L21 11l-6.5 2L12 20l-2.5-7L3 11l6.5-2z" fill="#fff"></path></svg></span>ракета<small>· налоги</small></div>
+    <span class="privacy"><span class="dot"></span>Всё считается у вас в браузере — данные никуда не уходят</span>
+  </div>
+  <div class="lead">
+    <h1>Налоги и сроки 2026 без бухгалтера</h1>
+    <p>Прикиньте налоговую нагрузку на УСН, патенте или НПД с учётом взносов и нового НДС — и держите под рукой все дедлайны года. Для ИП и ООО.</p>
+    <span class="upd">Обновлено под налоговую реформу 2026</span>
+  </div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-view="calc">Калькулятор</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="cal">Календарь 2026</button>
+  </div>
+</div></header>
+
+<div class="wrap">
+
+<!-- CALCULATOR -->
+<section class="view on" id="view-calc">
+<div class="calc-grid">
+  <div class="panel">
+    <div class="fgroup">
+      <div class="flabel">Форма бизнеса</div>
+      <div class="seg" id="seg-who">
+        <button data-who="ip" aria-pressed="true">ИП</button>
+        <button data-who="ooo" aria-pressed="false">ООО</button>
+      </div>
+    </div>
+    <div class="fgroup">
+      <div class="flabel">Налоговый режим</div>
+      <div class="seg modes" id="seg-mode">
+        <button data-mode="income" aria-pressed="true">УСН «Доходы»</button>
+        <button data-mode="profit" aria-pressed="false">УСН «Д − Р»</button>
+        <button data-mode="patent" aria-pressed="false">Патент</button>
+        <button data-mode="npd" aria-pressed="false">НПД</button>
+      </div>
+    </div>
+
+    <div class="fgroup" data-show="income profit">
+      <div class="flabel">Ставка налога</div>
+      <div class="inwrap"><input type="number" id="rate" step="any"><span class="suf">%</span></div>
+      <div class="hint">По умолчанию 6% и 15%. В некоторых регионах ставки ниже — поставьте свою.</div>
+    </div>
+
+    <div class="fgroup" data-show="income profit patent">
+      <div class="flabel" id="lbl-income">Годовой доход (выручка)</div>
+      <div class="inwrap"><input type="number" id="income" placeholder="0" step="any"><span class="suf">₽</span></div>
+    </div>
+    <div class="fgroup" data-show="profit">
+      <div class="flabel">Годовые расходы</div>
+      <div class="inwrap"><input type="number" id="expense" placeholder="0" step="any"><span class="suf">₽</span></div>
+      <div class="hint">Без взносов «за себя» — их добавим автоматически.</div>
+    </div>
+    <div class="fgroup" data-show="patent">
+      <div class="flabel">Потенциально возможный доход по патенту</div>
+      <div class="inwrap"><input type="number" id="patent_pot" placeholder="0" step="any"><span class="suf">₽</span></div>
+      <div class="hint">Указан в патенте для вашего вида деятельности и региона (не фактический доход).</div>
+    </div>
+    <div class="fgroup" data-show="npd">
+      <div class="row2">
+        <div><div class="flabel">Доход от физлиц</div><div class="inwrap"><input type="number" id="npd_fiz" placeholder="0" step="any"><span class="suf">₽</span></div></div>
+        <div><div class="flabel">Доход от юрлиц и ИП</div><div class="inwrap"><input type="number" id="npd_jur" placeholder="0" step="any"><span class="suf">₽</span></div></div>
+      </div>
+      <div class="hint">Ставки: 4% с доходов от физлиц, 6% — от компаний и ИП.</div>
+    </div>
+
+    <div class="fgroup" data-show="income profit patent">
+      <label class="check"><input type="checkbox" id="emp"> У меня есть сотрудники</label>
+      <div class="hint" data-show="income patent">С сотрудниками налог можно уменьшить на взносы максимум вдвое (без них — до нуля).</div>
+    </div>
+  </div>
+
+  <div class="result">
+    <div class="headline">
+      <div class="cap">В бюджет за год, итого</div>
+      <div class="big" id="r-total">0 ₽</div>
+      <div class="sub">
+        <div><span>Эффективная ставка</span> <b id="r-rate">0%</b></div>
+        <div><span>В месяц</span> <b id="r-month">0 ₽</b></div>
+      </div>
+    </div>
+    <div class="breakdown" id="r-break"></div>
+    <div id="r-notes"></div>
+  </div>
+</div>
+</section>
+
+<!-- CALENDAR -->
+<section class="view" id="view-cal">
+  <div class="cal-controls">
+    <div class="seg who" id="cal-who">
+      <button data-cwho="ip" aria-pressed="true">ИП</button>
+      <button data-cwho="ooo" aria-pressed="false">ООО</button>
+    </div>
+    <label class="toggle"><input type="checkbox" id="t-nds"> Я плачу НДС</label>
+    <label class="toggle"><input type="checkbox" id="t-emp"> Есть сотрудники</label>
+  </div>
+  <div class="ribbon" id="ribbon"></div>
+  <div id="cal-list"></div>
+</section>
+
+</div>
+
+<div class="foot"><div class="wrap">
+  <div class="funnel">
+    <a class="fcard" href="https://tashev.ru/?utm_source=raketa_portal&utm_content=books" target="_blank" rel="noopener">
+      <div class="k">Книги Рината Ташева →</div><div class="v">О бизнесе, деньгах и мышлении предпринимателя</div></a>
+    <a class="fcard" href="https://t.me/Rinat_Tashev" target="_blank" rel="noopener">
+      <div class="k">Телеграм-канал →</div><div class="v">Инструменты и заметки для своего дела</div></a>
+    <a class="fcard" href="https://tashev.ru/?utm_source=raketa_portal&utm_content=raketa_media" target="_blank" rel="noopener">
+      <div class="k">Сделаем под ключ — Raketa Media →</div><div class="v">Маркетинг и SMM для малого бизнеса</div></a>
+  </div>
+  <p class="disc"><b>Это оценка, а не налоговая консультация.</b> Расчёт упрощён и не учитывает все нюансы (региональные льготы, торговый сбор, совмещение режимов, точный расчёт НДС с вычетами). Цифры приведены по нормам налоговой реформы 2026 года: фиксированные взносы ИП «за себя» — 57 390 ₽, максимум взносов — 379 208 ₽, порог освобождения от НДС на УСН — 20 млн ₽, основная ставка НДС — 22% (спецставки 5% и 7%). Перед уплатой сверяйте суммы и сроки с актуальными данными ФНС или с бухгалтером. Сервис не сохраняет и не передаёт ваши данные.</p>
+</div></div>
+
+<script>
+"use strict";
+if (location.hash === '#embed') document.documentElement.classList.add('embed');
+const $=id=>document.getElementById(id);
+const C={FIX:57390,DOP_MAX:321818,TOTAL_MAX:379208,LIM300:300000,NDS_FREE:20000000};
+const state={who:'ip',mode:'income',emp:false};
+
+const money=n=>Math.round(n||0).toLocaleString('ru-RU')+'\u00A0₽';
+const fmt=n=>Math.round(n||0).toLocaleString('ru-RU');
+
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function num(id){return parseFloat($(id)?.value)||0;}
+function vznosySelf(base){const dop=clamp((base-C.LIM300)*0.01,0,C.DOP_MAX);return {fix:C.FIX,dop,total:C.FIX+dop};}
+
+function compute(){
+  const {who,mode,emp}=state;
+  let o={lines:[],total:0,income:0,notes:[]};
+
+  if(mode==='npd'){
+    const f=num('npd_fiz'),j=num('npd_jur'),tax=f*0.04+j*0.06;
+    o.income=f+j; o.total=tax;
+    o.lines=[['Налог с доходов от физлиц (4%)',f*0.04],['Налог с доходов от юрлиц (6%)',j*0.06],['__total__',tax]];
+    if(f+j>2400000)o.notes.push(['warn','Доход выше лимита НПД 2,4 млн ₽ в год — право на самозанятость теряется.']);
+    o.notes.push(['ok','На НПД страховые взносы «за себя» платить не нужно, отчётности нет.']);
+    return o;
+  }
+  if(mode==='patent'){
+    const pot=num('patent_pot'),inc=num('income'),patent=pot*0.06,v=vznosySelf(pot);
+    const after=emp?Math.max(patent*0.5,patent-v.total):Math.max(0,patent-v.total);
+    o.income=inc||pot; o.total=after+v.total;
+    o.lines=[['Стоимость патента (6% от потенц. дохода)',patent],
+      ['− уменьшение на страховые взносы',-(patent-after),'minus'],
+      ['Патент к уплате',after,'head'],
+      ['Взносы «за себя»'+(v.dop?' (фикс + 1%)':''),v.total],
+      ['__total__',o.total]];
+    if(inc>20000000)o.notes.push(['warn','Фактический доход выше 20 млн ₽ — лимит ПСН на 2026 превышен, патент слетает на ОСНО/УСН.']);
+    if(!emp&&patent<=v.total)o.notes.push(['ok','Взносы покрывают стоимость патента — патент к доплате 0 ₽.']);
+    return o;
+  }
+
+  // УСН
+  const inc=num('income'); o.income=inc;
+  const rate=num('rate')||(mode==='income'?6:15);
+  let v=who==='ooo'?{fix:0,dop:0,total:0}:null, tax=0;
+
+  if(mode==='income'){
+    if(!v)v=vznosySelf(inc);
+    const raw=inc*rate/100;
+    const after=who==='ooo'?raw:(emp?Math.max(raw*0.5,raw-v.total):Math.max(0,raw-v.total));
+    tax=after;
+    o.lines.push(['Налог УСН ('+rate+'% с доходов)',raw]);
+    if(who!=='ooo')o.lines.push(['− уменьшение на взносы',-(raw-after),'minus']);
+    o.lines.push([who==='ooo'?'Налог к уплате':'Налог УСН к доплате',after,'head']);
+    if(who==='ip'&&!emp&&raw<=v.total)o.notes.push(['ok','Взносы полностью покрывают налог — УСН к доплате 0 ₽. В бюджет уходят только взносы.']);
+  } else {
+    const exp=num('expense'); if(!v)v=vznosySelf(Math.max(0,inc-exp));
+    const expTotal=exp+(who==='ooo'?0:v.total);
+    const base=Math.max(0,inc-expTotal);
+    const calc=base*rate/100, minTax=inc*0.01; tax=Math.max(calc,minTax);
+    o.lines.push(['Доходы',inc]);
+    o.lines.push(['− Расходы'+(who!=='ooo'?' (вкл. взносы за себя)':''),-expTotal,'minus']);
+    o.lines.push(['Налоговая база',base,'head']);
+    o.lines.push(['Налог '+rate+'% (или минимум 1% с доходов)',tax,'head']);
+    if(tax===minTax&&minTax>calc&&inc>0)o.notes.push(['info','Сработал минимальный налог 1% от доходов — он больше расчётного по ставке.']);
+  }
+
+  if(who!=='ooo')o.lines.push(['Взносы «за себя»'+(v.dop?' (57 390 + 1% = '+fmt(v.fix)+' + '+fmt(v.dop)+')':' (57 390 ₽)'),v.total]);
+  o.total=tax+v.total;
+
+  if(inc>C.NDS_FREE){
+    const nds=inc*0.05; o.total+=nds;
+    o.lines.push(['НДС (ориентир, спецставка 5%)',nds]);
+    o.notes.push(['warn','Доход выше 20 млн ₽ — с 2026 вы плательщик НДС. Ориентир по спецставке 5% без вычетов ≈ '+money(nds)+'/год. Точная сумма зависит от выбранной схемы (5%/7%/22%) — это грубая прикидка.']);
+  } else if(inc>0){
+    o.notes.push(['ok','Доход до 20 млн ₽ — НДС на УСН в 2026 платить не нужно, освобождение автоматическое.']);
+  }
+  if(who==='ooo')o.notes.push(['info','Для ООО не показаны взносы за сотрудников. Налог УСН «Доходы» можно дополнительно уменьшить на них до 50%.']);
+  o.lines.push(['__total__',o.total]);
+  return o;
+}
+
+function render(){
+  const o=compute();
+  $('r-total').textContent=money(o.total);
+  const eff=o.income>0?(o.total/o.income*100):0;
+  $('r-rate').textContent=(Math.round(eff*10)/10).toString().replace('.',',')+'%';
+  $('r-month').textContent=money(o.total/12);
+
+  let h='';
+  o.lines.forEach(([label,v,cls])=>{
+    if(label==='__total__'){h+=`<div class="bline total"><span>Итого в бюджет за год</span><span class="v">${money(v)}</span></div>`;return;}
+    const isMinus=cls==='minus';
+    h+=`<div class="bline ${cls==='head'?'head':''} ${isMinus?'minus':''}"><span>${label}</span><span class="v">${isMinus?'−':''}${money(Math.abs(v)).replace('−','')}</span></div>`;
+  });
+  $('r-break').innerHTML=h;
+
+  $('r-notes').innerHTML=o.notes.map(([type,txt])=>{
+    const ic={ok:'✓',warn:'!',info:'i'}[type];
+    return `<div class="note ${type}"><span class="ic">${ic}</span><span>${txt}</span></div>`;
+  }).join('');
+}
+
+/* visibility of fields by mode */
+function applyFields(){
+  document.querySelectorAll('[data-show]').forEach(el=>{
+    el.style.display=el.dataset.show.split(' ').includes(state.mode)?'':'none';
+  });
+  $('lbl-income').textContent=state.mode==='patent'?'Фактический годовой доход (для проверки лимита)':'Годовой доход (выручка)';
+  $('rate').placeholder=state.mode==='profit'?'15':'6';
+}
+
+/* who / mode segmented */
+$('seg-who').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  state.who=b.dataset.who;
+  [...e.currentTarget.children].forEach(x=>x.setAttribute('aria-pressed',x===b));
+  // ООО: disable patent/npd
+  const ooo=state.who==='ooo';
+  document.querySelectorAll('#seg-mode button').forEach(mb=>{
+    const dis=ooo&&(mb.dataset.mode==='patent'||mb.dataset.mode==='npd');
+    mb.disabled=dis;
+    if(dis&&state.mode===mb.dataset.mode){state.mode='income';}
+  });
+  syncModeButtons(); applyFields(); render();
+});
+function syncModeButtons(){document.querySelectorAll('#seg-mode button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===state.mode));}
+$('seg-mode').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;
+  state.mode=b.dataset.mode; syncModeButtons(); applyFields(); render();
+});
+$('emp').addEventListener('change',e=>{state.emp=e.target.checked;render();});
+document.querySelectorAll('#view-calc input[type=number]').forEach(i=>i.addEventListener('input',render));
+
+/* ── tabs ── */
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+  t.setAttribute('aria-selected','true');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  $('view-'+t.dataset.view).classList.add('on');
+  if(t.dataset.view==='cal')renderCal();
+}));
+
+/* ── calendar data (2026, с учётом переносов выходных) ── */
+const MONTHS=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+const MONTHS_FULL=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const CAL=[
+  {d:'26.01',m:0,t:'Декларация по НДС за IV квартал 2025',cat:'nds',who:'both',n:'Электронно. Срок 25-го перенесён с выходного.'},
+  {d:'28.01',m:0,t:'Уплата 1/3 НДС за IV квартал 2025',cat:'nds',who:'both',n:'НДС платится тремя равными долями — до 28 числа каждого из трёх месяцев.'},
+  {d:'26.01',m:0,t:'РСВ за 2025 год',cat:'emp',who:'both',n:'Годовой расчёт по страховым взносам. Срок 25-го перенесён с выходного.'},
+  {d:'25.02',m:1,t:'6-НДФЛ за 2025 год',cat:'emp',who:'both',n:'Годовой отчёт по доходам сотрудников.'},
+  {d:'25.03',m:2,t:'Декларация по УСН за 2025 год (ООО)',cat:'usn',who:'ooo',n:'Организации сдают раньше предпринимателей.'},
+  {d:'30.03',m:2,t:'Налог по УСН за 2025 год (ООО)',cat:'usn',who:'ooo',n:'Срок 28 марта перенесён с субботы.'},
+  {d:'27.04',m:3,t:'Декларация по УСН за 2025 год (ИП)',cat:'usn',who:'ip',n:'Срок 25 апреля перенесён с выходного.'},
+  {d:'27.04',m:3,t:'Декларация по НДС за I квартал 2026',cat:'nds',who:'both',n:''},
+  {d:'27.04',m:3,t:'6-НДФЛ и РСВ за I квартал 2026',cat:'emp',who:'both',n:''},
+  {d:'28.04',m:3,t:'Налог по УСН за 2025 год (ИП)',cat:'usn',who:'ip',n:'Годовой налог за прошлый год.'},
+  {d:'28.04',m:3,t:'Аванс по УСН за I квартал 2026',cat:'usn',who:'both',n:'Авансовые платежи — до 28 числа месяца после квартала.'},
+  {d:'01.07',m:6,t:'Доп. взнос 1% за 2025 год',cat:'vznosy',who:'ip',n:'1% с дохода свыше 300 000 ₽ за 2025 год. Максимум доп. части за 2025 год — 300 888 ₽.'},
+  {d:'27.07',m:6,t:'Декларация по НДС за II квартал 2026',cat:'nds',who:'both',n:''},
+  {d:'27.07',m:6,t:'6-НДФЛ и РСВ за полугодие 2026',cat:'emp',who:'both',n:''},
+  {d:'28.07',m:6,t:'Аванс по УСН за полугодие 2026',cat:'usn',who:'both',n:''},
+  {d:'26.10',m:9,t:'Декларация по НДС за III квартал 2026',cat:'nds',who:'both',n:''},
+  {d:'26.10',m:9,t:'6-НДФЛ и РСВ за 9 месяцев 2026',cat:'emp',who:'both',n:''},
+  {d:'28.10',m:9,t:'Аванс по УСН за 9 месяцев 2026',cat:'usn',who:'both',n:''},
+  {d:'28.12',m:11,t:'Фиксированные взносы ИП «за себя» за 2026',cat:'vznosy',who:'ip',n:'57 390 ₽. Платятся даже при нулевом доходе. Проверьте баланс ЕНС перед праздниками.'},
+];
+const TAGNAME={usn:'УСН',vznosy:'Взносы',nds:'НДС',emp:'Сотрудники'};
+
+function calFilter(){
+  return CAL.filter(e=>{
+    if(e.who!=='both'&&e.who!==state.cwho)return false;
+    if(e.cat==='nds'&&!$('t-nds').checked)return false;
+    if(e.cat==='emp'&&!$('t-emp').checked)return false;
+    return true;
+  });
+}
+function renderCal(){
+  const items=calFilter();
+  // ribbon
+  const monthsWith=new Set(items.map(e=>e.m));
+  $('ribbon').innerHTML=MONTHS.map((m,i)=>
+    `<button class="mchip ${monthsWith.has(i)?'has':'empty'}" data-jump="${i}">${m}</button>`).join('');
+  $('ribbon').querySelectorAll('[data-jump]').forEach(b=>b.addEventListener('click',()=>{
+    const el=$('m-'+b.dataset.jump);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'start'});
+      $('ribbon').querySelectorAll('.mchip').forEach(x=>x.removeAttribute('aria-current'));
+      b.setAttribute('aria-current','true');}
+  }));
+  // list
+  const list=$('cal-list');
+  if(!items.length){list.innerHTML='<div class="empty-cal">Нет событий по выбранным фильтрам.</div>';return;}
+  let h='';
+  for(let m=0;m<12;m++){
+    const ev=items.filter(e=>e.m===m);
+    if(!ev.length)continue;
+    h+=`<div class="month" id="m-${m}"><div class="mhead"><h3>${MONTHS_FULL[m]}</h3><span class="cnt">${ev.length} ${plu(ev.length,['событие','события','событий'])}</span></div>`;
+    // recurring hints inside relevant months
+    if(m===0&&$('t-nds').checked)h+=`<div class="recur"><b>Ежемесячно:</b> уведомление по ЕНП — до 25 числа месяца уплаты. <b>НДС</b> за квартал — тремя равными долями до 28 числа следующих трёх месяцев.</div>`;
+    if(m===0&&$('t-emp').checked)h+=`<div class="recur"><b>Ежемесячно по сотрудникам:</b> страховые взносы — до 28 числа за прошлый месяц; НДФЛ — двумя платежами (за 1–22 число до 28-го, за 23–конец месяца до 5-го следующего).</div>`;
+    ev.forEach(e=>{
+      const [day,mon]=e.d.split('.');
+      h+=`<div class="ev"><div class="day"><div class="d">${day}</div><div class="mo">${MONTHS[+mon-1]}</div></div>
+        <div class="body"><span class="tag ${e.cat}">${TAGNAME[e.cat]}</span><div class="t">${e.t}</div>${e.n?`<div class="n">${e.n}</div>`:''}</div></div>`;
+    });
+    h+='</div>';
+  }
+  list.innerHTML=h;
+}
+function plu(n,f){n=Math.abs(n)%100;const n1=n%10;if(n>10&&n<20)return f[2];if(n1>1&&n1<5)return f[1];if(n1===1)return f[0];return f[2];}
+
+state.cwho='ip';
+$('cal-who').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  state.cwho=b.dataset.cwho;[...e.currentTarget.children].forEach(x=>x.setAttribute('aria-pressed',x===b));renderCal();});
+$('t-nds').addEventListener('change',renderCal);
+$('t-emp').addEventListener('change',renderCal);
+
+/* init */
+applyFields(); render();
+</script>
+</body>
+</html>

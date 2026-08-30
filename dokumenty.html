@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Документы для бизнеса — счёт, КП, акт, договор</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A1712; --paper:#FAF8F4; --surface:#F6EFE0; --surface-2:#EFE4CB;
+  --line:#E9DDC1; --muted:#726A57; --accent:#EA4E1B; --accent-dark:#C23D14;
+  --good:#1E9E70; --warn:#B5730A; --radius:14px;
+  --shadow:0 1px 2px rgba(20,16,24,.04),0 10px 34px rgba(20,16,24,.07);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Onest',system-ui,sans-serif; color:var(--ink);
+  background:
+    radial-gradient(1200px 600px at 85% -10%, #fff 0%, transparent 60%),
+    linear-gradient(180deg,#FAF8F4 0%,#F3EBDA 100%);
+  background-attachment:fixed; min-height:100vh; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* ── header ── */
+header{padding:26px 0 8px}
+.brandbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.wordmark{display:flex;align-items:center;gap:11px;font-family:'Unbounded','Onest',sans-serif;font-weight:800;font-size:19px;letter-spacing:-.01em}
+.rk{width:30px;height:30px;border-radius:9px;background:var(--accent);flex:none;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(234,78,27,.3)}
+.wordmark small{font-family:'Onest';font-weight:500;color:var(--muted);font-size:13px;letter-spacing:0;text-transform:lowercase}
+.privacy{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--good);background:rgba(30,158,112,.09);border:1px solid rgba(30,158,112,.2);padding:6px 11px;border-radius:999px;font-weight:600}
+.privacy .dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 0 3px rgba(30,158,112,.18)}
+.lead{margin:18px 0 4px;max-width:640px}
+.lead h1{font-family:'Unbounded','Onest',sans-serif;font-weight:800;font-size:clamp(26px,4vw,38px);line-height:1.05;letter-spacing:-.02em;margin:0 0 10px}
+.lead p{margin:0;color:var(--muted);font-size:15.5px}
+
+/* ── tabs ── */
+.tabs{display:flex;gap:6px;margin:24px 0 18px;background:var(--surface);padding:6px;border-radius:13px;border:1px solid var(--line);width:fit-content;max-width:100%;flex-wrap:wrap}
+.tab{appearance:none;border:0;background:transparent;font-family:inherit;font-weight:600;font-size:14px;color:var(--muted);padding:9px 16px;border-radius:9px;cursor:pointer;transition:.15s;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff;box-shadow:var(--shadow)}
+
+/* ── layout ── */
+.grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:22px;align-items:start;padding-bottom:60px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+/* ── controls ── */
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.controls{padding:6px 6px 16px}
+.acc{border-bottom:1px solid var(--line)}
+.acc:last-child{border-bottom:0}
+.acc>summary{list-style:none;cursor:pointer;padding:15px 16px;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:space-between}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary .chev{color:var(--muted);transition:.2s;font-size:12px}
+.acc[open]>summary .chev{transform:rotate(90deg)}
+.acc .body{padding:2px 16px 16px}
+.field{margin-bottom:11px}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;letter-spacing:.01em}
+input,textarea,select{width:100%;font-family:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:9px 11px;transition:.15s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(234,78,27,.12)}
+textarea{resize:vertical;min-height:64px;line-height:1.5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+select{appearance:none;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%236C6675' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:30px}
+
+/* positions table editor */
+.pos-row{display:grid;grid-template-columns:1fr 56px 50px 88px 26px;gap:6px;margin-bottom:7px;align-items:center}
+.pos-row input{padding:7px 8px;font-size:13px}
+.pos-row .del{appearance:none;border:0;background:var(--surface-2);color:var(--muted);width:26px;height:30px;border-radius:7px;cursor:pointer;font-size:15px;line-height:1}
+.pos-row .del:hover{background:#f6dcd6;color:var(--accent-dark)}
+.pos-head{display:grid;grid-template-columns:1fr 56px 50px 88px 26px;gap:6px;font-size:10.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px;padding:0 2px}
+.addrow{appearance:none;border:1px dashed var(--line);background:transparent;color:var(--accent-dark);font-family:inherit;font-weight:600;font-size:13px;padding:8px;border-radius:9px;cursor:pointer;width:100%;margin-top:3px}
+.addrow:hover{background:rgba(234,78,27,.05);border-color:var(--accent)}
+
+/* preview side */
+.previewcol{position:sticky;top:18px}
+.actionbar{display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap}
+.btn{appearance:none;border:0;font-family:inherit;font-weight:700;font-size:14px;padding:11px 17px;border-radius:11px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(234,78,27,.28)}
+.btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px)}
+.btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-ghost.muted{color:var(--muted)}
+.sheetwrap{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:22px;overflow:auto;max-height:78vh;box-shadow:inset 0 1px 4px rgba(20,16,24,.05)}
+.sheet{background:#fff;width:100%;max-width:720px;margin:0 auto;padding:48px 54px;box-shadow:0 4px 24px rgba(20,16,24,.12);font-family:'Times New Roman',Times,serif;font-size:13.2px;color:#111;line-height:1.4}
+.sheet h2{font-size:16px;text-align:center;margin:0 0 4px}
+.sheet table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
+.sheet th,.sheet td{border:1px solid #333;padding:5px 7px;text-align:left;vertical-align:top}
+.sheet th{background:#f0f0f0;font-weight:bold;text-align:center;font-size:11.5px}
+.sheet td.num,.sheet th.num{text-align:right;white-space:nowrap}
+.sheet td.c,.sheet th.c{text-align:center}
+.sheet .req{font-size:12px;line-height:1.45}
+.sheet .muted{color:#555}
+.sheet .sign{display:flex;justify-content:space-between;gap:30px;margin-top:34px}
+.sheet .sign .col{flex:1}
+.sheet .sline{border-bottom:1px solid #111;height:26px;margin-bottom:2px}
+.sheet hr{border:0;border-top:1px solid #111;margin:8px 0}
+.sheet .clause{margin:9px 0}
+.sheet .clause b{display:block;margin-bottom:2px}
+.sheet p{margin:6px 0}
+.sheet .center{text-align:center}
+.sheet .right{text-align:right}
+.sheet .small{font-size:11px}
+.empty{color:#bbb;font-style:italic}
+
+/* footer */
+.foot{border-top:1px solid var(--line);background:rgba(255,255,255,.5);margin-top:10px}
+.foot .wrap{padding:30px 20px 40px}
+.funnel{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+@media(max-width:680px){.funnel{grid-template-columns:1fr}.row3{grid-template-columns:1fr}.pos-row,.pos-head{grid-template-columns:1fr 44px 40px 64px 22px;gap:4px}}
+.fcard{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;transition:.15s}
+.fcard:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+.fcard .k{font-weight:700;font-size:14.5px;margin-bottom:3px}
+.fcard .v{font-size:12.5px;color:var(--muted)}
+.disc{font-size:12px;color:var(--muted);line-height:1.55;max-width:760px}
+.disc b{color:var(--ink)}
+
+/* режим встраивания в кабинет: без дублирующей шапки и футера */
+html.embed .brandbar,html.embed .lead,html.embed .funnel{display:none}
+html.embed header{padding:14px 0 4px}
+html.embed .foot .wrap{padding:18px 20px 24px}
+
+@media print{
+  body{background:#fff}
+  header,.tabs,.controls,.actionbar,.foot,.lead,.previewcol>.actionbar{display:none!important}
+  .wrap,.grid{display:block;padding:0;margin:0;max-width:none}
+  .sheetwrap{padding:0;border:0;background:#fff;max-height:none;box-shadow:none;overflow:visible}
+  .sheet{box-shadow:none;max-width:none;padding:0;width:100%;font-size:12pt}
+  .previewcol{position:static}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brandbar">
+    <div class="wordmark"><span class="rk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.5 7L21 11l-6.5 2L12 20l-2.5-7L3 11l6.5-2z" fill="#fff"></path></svg></span>ракета<small>· документы</small></div>
+    <span class="privacy"><span class="dot"></span>Всё считается у вас в браузере — данные никуда не уходят</span>
+  </div>
+  <div class="lead">
+    <h1>Документы для бизнеса за минуту</h1>
+    <p>Счёт, коммерческое предложение, акт и договор оказания услуг. Заполните поля — получите готовый файл для печати, PDF или Word. Бесплатно, без регистрации.</p>
+  </div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-doc="schet">Счёт на оплату</button>
+    <button class="tab" role="tab" aria-selected="false" data-doc="kp">Коммерческое предложение</button>
+    <button class="tab" role="tab" aria-selected="false" data-doc="akt">Акт</button>
+    <button class="tab" role="tab" aria-selected="false" data-doc="dogovor">Договор услуг</button>
+  </div>
+</div></header>
+
+<div class="wrap"><div class="grid">
+  <!-- LEFT: controls -->
+  <div class="panel controls">
+
+    <details class="acc" open id="acc-supplier">
+      <summary>Ваши реквизиты <span class="chev">▶</span></summary>
+      <div class="body">
+        <div class="field"><label id="lbl-sup-name">Наименование / ИП</label>
+          <input id="sup_name" placeholder="ИП Иванов Иван Иванович" data-save></div>
+        <div class="row2">
+          <div class="field"><label>ИНН</label><input id="sup_inn" placeholder="770000000000" data-save></div>
+          <div class="field"><label>КПП</label><input id="sup_kpp" placeholder="— (для ООО)" data-save></div>
+        </div>
+        <div class="field"><label>Адрес</label><input id="sup_addr" placeholder="г. Казань, ул. ..." data-save></div>
+        <div class="row2">
+          <div class="field"><label>Телефон / e-mail</label><input id="sup_contact" placeholder="+7 ... · mail@..." data-save></div>
+          <div class="field"><label>Действует на основании</label><input id="sup_basis" placeholder="свидетельства / Устава" data-save></div>
+        </div>
+        <div class="field" data-bankonly><label style="color:var(--ink);font-weight:700">Банковские реквизиты <span class="muted" style="font-weight:500">(для счёта)</span></label></div>
+        <div class="row2" data-bankonly>
+          <div class="field"><label>Расчётный счёт</label><input id="sup_rs" placeholder="40802810..." data-save></div>
+          <div class="field"><label>БИК</label><input id="sup_bik" placeholder="044525..." data-save></div>
+        </div>
+        <div class="row2" data-bankonly>
+          <div class="field"><label>Банк</label><input id="sup_bank" placeholder="АО «Банк»" data-save></div>
+          <div class="field"><label>Корр. счёт</label><input id="sup_ks" placeholder="30101810..." data-save></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="acc" open id="acc-client">
+      <summary>Контрагент <span class="chev">▶</span></summary>
+      <div class="body">
+        <div class="field"><label id="lbl-cli-name">Наименование / ФИО</label><input id="cli_name" placeholder="ООО «Ромашка»"></div>
+        <div class="row2">
+          <div class="field"><label>ИНН</label><input id="cli_inn" placeholder="1600000000"></div>
+          <div class="field"><label>КПП</label><input id="cli_kpp" placeholder="160001001"></div>
+        </div>
+        <div class="field"><label>Адрес</label><input id="cli_addr" placeholder="г. Казань, ..."></div>
+      </div>
+    </details>
+
+    <details class="acc" open id="acc-meta">
+      <summary><span id="meta-title">Параметры счёта</span> <span class="chev">▶</span></summary>
+      <div class="body">
+        <div class="row2">
+          <div class="field"><label id="lbl-num">Номер</label><input id="doc_num" value="1"></div>
+          <div class="field"><label>Дата</label><input id="doc_date" type="date"></div>
+        </div>
+        <div class="field" data-show="schet akt"><label>НДС</label>
+          <select id="nds_mode">
+            <option value="0">Без НДС (освобождён / УСН до 20 млн)</option>
+            <option value="5">НДС 5% (УСН, спецставка)</option>
+            <option value="7">НДС 7% (УСН, спецставка)</option>
+            <option value="10">НДС 10% (льготная)</option>
+            <option value="22">НДС 22% (основная, 2026)</option>
+          </select>
+          <div class="small muted" style="margin-top:5px">Цены указываются с учётом НДС — налог выделяется строкой «в том числе».</div>
+        </div>
+        <div class="field" data-show="akt dogovor"><label>Договор (№ и дата) <span class="muted" style="font-weight:500">— необязательно</span></label>
+          <input id="contract_ref" placeholder="№ 5 от 01.06.2026"></div>
+        <div class="field" data-show="dogovor"><label>Город заключения</label><input id="doc_city" placeholder="Казань"></div>
+
+        <!-- КП-only -->
+        <div class="field" data-show="kp"><label>Заголовок предложения</label><input id="kp_title" placeholder="Коммерческое предложение по продвижению"></div>
+        <div class="field" data-show="kp"><label>Вступление / оффер</label>
+          <textarea id="kp_intro" placeholder="Благодарим за интерес к нашим услугам. Предлагаем...">Благодарим за интерес к нашим услугам. Мы подготовили предложение, которое поможет решить вашу задачу быстро и с понятным результатом.</textarea></div>
+        <div class="field" data-show="kp"><label>Условия и сроки</label>
+          <textarea id="kp_terms" placeholder="Срок выполнения, гарантии, порядок оплаты">Срок выполнения — до 14 рабочих дней. Оплата: 50% предоплата, 50% по факту. Предложение действительно 14 дней.</textarea></div>
+
+        <!-- Договор-only -->
+        <div class="field" data-show="dogovor"><label>Предмет договора (какие услуги)</label>
+          <textarea id="dog_subject" placeholder="Исполнитель обязуется оказать...">консультационные услуги по продвижению в социальных сетях, включая разработку контент-плана и публикацию материалов</textarea></div>
+        <div class="row2" data-show="dogovor">
+          <div class="field"><label>Стоимость, ₽</label><input id="dog_price" type="number" placeholder="50000"></div>
+          <div class="field"><label>Предоплата, %</label><input id="dog_prepay" type="number" value="50"></div>
+        </div>
+        <div class="field" data-show="dogovor"><label>Срок оказания услуг</label><input id="dog_term" placeholder="в течение 30 календарных дней с даты оплаты"></div>
+      </div>
+    </details>
+
+    <details class="acc" open id="acc-pos" data-show="schet akt kp">
+      <summary><span id="pos-title">Позиции</span> <span class="chev">▶</span></summary>
+      <div class="body">
+        <div class="pos-head"><span>Наименование</span><span>Кол-во</span><span>Ед.</span><span>Цена ₽</span><span></span></div>
+        <div id="pos-list"></div>
+        <button class="addrow" id="addPos">+ добавить позицию</button>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- RIGHT: preview -->
+  <div class="previewcol">
+    <div class="actionbar">
+      <button class="btn btn-primary" id="btnPrint">🖨 Печать / PDF</button>
+      <button class="btn btn-ghost" id="btnDoc">⬇ Скачать .doc (Word)</button>
+      <button class="btn btn-ghost muted" id="btnClear">Очистить контрагента</button>
+    </div>
+    <div class="sheetwrap">
+      <div class="sheet" id="sheet"></div>
+    </div>
+  </div>
+</div></div>
+
+<div class="foot"><div class="wrap">
+  <div class="funnel">
+    <a class="fcard" href="https://tashev.ru/?utm_source=raketa_portal&utm_content=books" target="_blank" rel="noopener">
+      <div class="k">Книги Рината Ташева →</div><div class="v">О бизнесе, деньгах и мышлении предпринимателя</div></a>
+    <a class="fcard" href="https://t.me/Rinat_Tashev" target="_blank" rel="noopener">
+      <div class="k">Телеграм-канал →</div><div class="v">Инструменты и заметки для своего дела</div></a>
+    <a class="fcard" href="https://tashev.ru/?utm_source=raketa_portal&utm_content=raketa_media" target="_blank" rel="noopener">
+      <div class="k">Сделаем под ключ — Raketa Media →</div><div class="v">Маркетинг и SMM для малого бизнеса</div></a>
+  </div>
+  <p class="disc"><b>Важно.</b> Шаблоны — типовые образцы, а не юридическая консультация. Счёт, акт и договор подходят для большинства стандартных ситуаций, но для крупных или нетиповых сделок проверьте текст у юриста и бухгалтера. Ставки НДС и реквизиты сверяйте с актуальными требованиями на момент использования. Сервис не сохраняет и не передаёт ваши данные — всё остаётся в вашем браузере.</p>
+</div></div>
+
+<script>
+"use strict";
+if (location.hash === '#embed') document.documentElement.classList.add('embed');
+const $ = id => document.getElementById(id);
+let DOC = "schet";
+
+/* ---------- number → words (рубли) ---------- */
+const ONES=['','один','два','три','четыре','пять','шесть','семь','восемь','девять'];
+const ONES_F=['','одна','две','три','четыре','пять','шесть','семь','восемь','девять'];
+const TEENS=['десять','одиннадцать','двенадцать','тринадцать','четырнадцать','пятнадцать','шестнадцать','семнадцать','восемнадцать','девятнадцать'];
+const TENS=['','','двадцать','тридцать','сорок','пятьдесят','шестьдесят','семьдесят','восемьдесят','девяносто'];
+const HUND=['','сто','двести','триста','четыреста','пятьсот','шестьсот','семьсот','восемьсот','девятьсот'];
+function triple(n,f){let r=[];const h=Math.floor(n/100),t=Math.floor(n%100/10),o=n%10;
+  if(h)r.push(HUND[h]); if(t>1){r.push(TENS[t]);if(o)r.push((f?ONES_F:ONES)[o]);}
+  else if(t===1)r.push(TEENS[o]); else if(o)r.push((f?ONES_F:ONES)[o]); return r.join(' ');}
+function plural(n,f){n=Math.abs(n)%100;const n1=n%10;
+  if(n>10&&n<20)return f[2]; if(n1>1&&n1<5)return f[1]; if(n1===1)return f[0]; return f[2];}
+function intWords(num){if(num===0)return'ноль';let p=[];
+  const sc=[{d:1e9,f:0,w:['миллиард','миллиарда','миллиардов']},{d:1e6,f:0,w:['миллион','миллиона','миллионов']},
+  {d:1e3,f:1,w:['тысяча','тысячи','тысяч']},{d:1,f:0,w:null}]; let rest=num;
+  for(const s of sc){const c=Math.floor(rest/s.d);rest%=s.d;if(!c)continue;p.push(triple(c,s.f));if(s.w)p.push(plural(c,s.w));}
+  return p.join(' ');}
+function rub2words(a){const rub=Math.floor(a),kop=Math.round((a-rub)*100);
+  let s=intWords(rub)+' '+plural(rub,['рубль','рубля','рублей'])+' '+String(kop).padStart(2,'0')+' '+plural(kop,['копейка','копейки','копеек']);
+  return s.charAt(0).toUpperCase()+s.slice(1);}
+
+/* ---------- helpers ---------- */
+const fmt = n => (n||0).toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2});
+const val = id => ($(id)?.value||'').trim();
+const ph  = (v,p) => v? esc(v) : '<span class="empty">'+p+'</span>';
+function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function dmy(iso){if(!iso)return''; const [y,m,d]=iso.split('-'); return `${d}.${m}.${y}`;}
+function dmyLong(iso){if(!iso)return''; const mm=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  const [y,m,d]=iso.split('-'); return `«${d}» ${mm[+m-1]} ${y} г.`;}
+
+/* ---------- positions ---------- */
+let positions = {schet:[],akt:[],kp:[]};
+function defPos(){return {name:'',qty:1,unit:'шт.',price:0};}
+function renderPosEditor(){
+  const list=$('pos-list'); const arr=positions[DOC]||[]; list.innerHTML='';
+  arr.forEach((p,i)=>{
+    const row=document.createElement('div'); row.className='pos-row';
+    row.innerHTML=`<input value="${esc(p.name)}" placeholder="Услуга / товар" data-i="${i}" data-k="name">
+      <input value="${p.qty}" type="number" min="0" step="any" data-i="${i}" data-k="qty">
+      <input value="${esc(p.unit)}" data-i="${i}" data-k="unit">
+      <input value="${p.price}" type="number" min="0" step="any" data-i="${i}" data-k="price">
+      <button class="del" data-del="${i}" title="Удалить">×</button>`;
+    list.appendChild(row);
+  });
+  list.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',e=>{
+    const i=+e.target.dataset.i,k=e.target.dataset.k;
+    positions[DOC][i][k] = (k==='qty'||k==='price')? parseFloat(e.target.value)||0 : e.target.value;
+    render();
+  }));
+  list.querySelectorAll('.del').forEach(b=>b.addEventListener('click',e=>{
+    positions[DOC].splice(+e.target.dataset.del,1); if(!positions[DOC].length)positions[DOC].push(defPos());
+    renderPosEditor(); render();
+  }));
+}
+$('addPos').addEventListener('click',()=>{positions[DOC].push(defPos());renderPosEditor();render();});
+
+function posTotals(){
+  const arr=positions[DOC]||[]; let sum=0; arr.forEach(p=>sum+=(p.qty||0)*(p.price||0));
+  const rate=DOC==='kp'?0:(+val('nds_mode')||0);
+  const nds = rate? sum*rate/(100+rate) : 0;
+  return {sum,nds,rate,count:arr.filter(p=>p.name).length};
+}
+
+/* ---------- document templates ---------- */
+function supplierBlock(){
+  const parts=[
+    `<b>${ph(val('sup_name'),'Ваше наименование')}</b>`,
+    val('sup_inn')||val('sup_kpp')? `ИНН ${esc(val('sup_inn'))}${val('sup_kpp')?', КПП '+esc(val('sup_kpp')):''}`:'',
+    esc(val('sup_addr')), esc(val('sup_contact'))
+  ].filter(Boolean);
+  return parts.join('<br>');
+}
+function clientBlock(){
+  const parts=[
+    `<b>${ph(val('cli_name'),'Контрагент')}</b>`,
+    val('cli_inn')||val('cli_kpp')? `ИНН ${esc(val('cli_inn'))}${val('cli_kpp')?', КПП '+esc(val('cli_kpp')):''}`:'',
+    esc(val('cli_addr'))
+  ].filter(Boolean);
+  return parts.join('<br>');
+}
+function posTable(showSum){
+  const arr=positions[DOC]||[]; let rows='';
+  arr.forEach((p,i)=>{
+    if(!p.name && !(p.qty&&p.price)) return;
+    const line=(p.qty||0)*(p.price||0);
+    rows+=`<tr><td class="c">${i+1}</td><td>${ph(p.name,'наименование')}</td>
+      <td class="c">${p.qty||0}</td><td class="c">${esc(p.unit)}</td>
+      <td class="num">${fmt(p.price)}</td><td class="num">${fmt(line)}</td></tr>`;
+  });
+  if(!rows) rows=`<tr><td class="c">1</td><td><span class="empty">добавьте позиции слева</span></td><td class="c">—</td><td class="c">—</td><td class="num">—</td><td class="num">—</td></tr>`;
+  return `<table><thead><tr><th class="c" style="width:32px">№</th><th>Наименование</th>
+    <th class="c" style="width:48px">Кол-во</th><th class="c" style="width:44px">Ед.</th>
+    <th class="num" style="width:80px">Цена</th><th class="num" style="width:90px">Сумма</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+function totalsBlock(){
+  const t=posTotals();
+  let h=`<table style="margin-top:0"><tbody>
+    <tr><td class="right" style="border:0">Итого:</td><td class="num" style="border:0;width:120px"><b>${fmt(t.sum)}</b></td></tr>`;
+  if(t.rate>0) h+=`<tr><td class="right" style="border:0">В том числе НДС ${t.rate}%:</td><td class="num" style="border:0">${fmt(t.nds)}</td></tr>`;
+  else h+=`<tr><td class="right" style="border:0" colspan="2"><span class="muted">Без налога (НДС)</span></td></tr>`;
+  h+=`<tr><td class="right" style="border:0"><b>Всего к оплате:</b></td><td class="num" style="border:0"><b>${fmt(t.sum)}</b></td></tr></tbody></table>`;
+  h+=`<p class="small">${t.count? 'Всего наименований: '+t.count+'. ':''}Сумма прописью: <b>${rub2words(t.sum)}.</b></p>`;
+  return h;
+}
+function signSchet(){
+  return `<div class="sign"><div class="col"><div class="sline"></div><div class="small">Руководитель / ИП</div></div>
+    <div class="col"><div class="sline"></div><div class="small">Бухгалтер (М.П.)</div></div></div>`;
+}
+
+function tplSchet(){
+  return `<h2>Счёт на оплату № ${ph(val('doc_num'),'1')} от ${dmy(val('doc_date'))||'—'}</h2>
+  <hr>
+  <table style="margin-top:6px"><tbody>
+    <tr><td style="width:120px"><b>Поставщик:</b></td><td class="req">${supplierBlock()}</td></tr>
+    ${ (val('sup_rs')||val('sup_bank')) ? `<tr><td><b>Банк:</b></td><td class="req">${ph(val('sup_bank'),'банк')}<br>
+       Р/с ${ph(val('sup_rs'),'—')} · БИК ${ph(val('sup_bik'),'—')} · К/с ${ph(val('sup_ks'),'—')}</td></tr>` : '' }
+    <tr><td><b>Покупатель:</b></td><td class="req">${clientBlock()}</td></tr>
+  </tbody></table>
+  ${posTable(true)}
+  ${totalsBlock()}
+  <p class="small muted">Оплата данного счёта означает согласие с условиями поставки. Счёт действителен к оплате в течение 5 банковских дней.</p>
+  ${signSchet()}`;
+}
+function tplAkt(){
+  const cref=val('contract_ref')?`по договору ${esc(val('contract_ref'))} `:'';
+  return `<h2>Акт № ${ph(val('doc_num'),'1')} от ${dmy(val('doc_date'))||'—'}</h2>
+  <p class="center small">сдачи-приёмки оказанных услуг (выполненных работ) ${cref}</p>
+  <hr>
+  <table style="margin-top:6px"><tbody>
+    <tr><td style="width:120px"><b>Исполнитель:</b></td><td class="req">${supplierBlock()}</td></tr>
+    <tr><td><b>Заказчик:</b></td><td class="req">${clientBlock()}</td></tr>
+  </tbody></table>
+  ${posTable(true)}
+  ${totalsBlock()}
+  <p>Вышеперечисленные услуги (работы) выполнены полностью и в срок. Заказчик претензий по объёму, качеству и срокам оказания услуг не имеет.</p>
+  <div class="sign"><div class="col"><div class="small"><b>Исполнитель</b></div><div class="sline" style="margin-top:18px"></div><div class="small">подпись / М.П.</div></div>
+    <div class="col"><div class="small"><b>Заказчик</b></div><div class="sline" style="margin-top:18px"></div><div class="small">подпись / М.П.</div></div></div>`;
+}
+function tplKp(){
+  const t=posTotals();
+  let rows='';
+  (positions.kp||[]).forEach((p,i)=>{ if(!p.name)return;
+    rows+=`<tr><td class="c">${i+1}</td><td>${esc(p.name)}</td><td class="c">${p.qty||1} ${esc(p.unit)}</td><td class="num">${fmt((p.qty||1)*(p.price||0))}</td></tr>`;});
+  if(!rows)rows=`<tr><td class="c">1</td><td><span class="empty">добавьте позиции слева</span></td><td class="c">—</td><td class="num">—</td></tr>`;
+  return `<p class="small muted">${ph(val('sup_name'),'Ваша компания')}${val('sup_contact')?' · '+esc(val('sup_contact')):''}</p>
+  <p class="small">Кому: ${ph(val('cli_name'),'контрагенту')}${val('doc_date')?' · '+dmy(val('doc_date')):''}</p>
+  <h2 style="margin-top:14px">${ph(val('kp_title'),'Коммерческое предложение')}</h2>
+  <hr>
+  <p>${esc(val('kp_intro')).replace(/\n/g,'<br>')}</p>
+  <table><thead><tr><th class="c" style="width:32px">№</th><th>Состав работ / услуг</th><th class="c" style="width:90px">Объём</th><th class="num" style="width:110px">Стоимость, ₽</th></tr></thead><tbody>${rows}</tbody></table>
+  <p class="right"><b>Итого: ${fmt(t.sum)} ₽</b>${t.rate?` (в т.ч. НДС ${t.rate}%)`:' (без НДС)'}</p>
+  <p>${esc(val('kp_terms')).replace(/\n/g,'<br>')}</p>
+  <p style="margin-top:18px">Будем рады сотрудничеству. По всем вопросам свяжитесь с нами: <b>${ph(val('sup_contact'),'контакты')}</b>.</p>
+  <div class="sign"><div class="col"><div class="sline"></div><div class="small">${ph(val('sup_name'),'подпись')}</div></div><div class="col"></div></div>`;
+}
+function tplDogovor(){
+  const price=parseFloat(val('dog_price'))||0;
+  const prepay=parseFloat(val('dog_prepay'));
+  const sup=val('sup_name')||'_____';
+  const basis=val('sup_basis')?`действующ___ на основании ${esc(val('sup_basis'))}`:'действующ___ на основании ____________';
+  const cli=val('cli_name')||'_____';
+  return `<h2>Договор оказания услуг № ${ph(val('doc_num'),'1')}</h2>
+  <table style="border:0;margin:2px 0"><tr><td style="border:0;padding:0">г. ${ph(val('doc_city'),'_____')}</td>
+    <td style="border:0;padding:0" class="right">${dmyLong(val('doc_date'))||'«__» ________ 20__ г.'}</td></tr></table>
+  <p class="small"><b>${esc(sup)}</b>, ${basis}, именуем__ в дальнейшем «Исполнитель», с одной стороны, и <b>${esc(cli)}</b>, именуем__ в дальнейшем «Заказчик», с другой стороны, заключили настоящий договор о нижеследующем.</p>
+
+  <div class="clause"><b>1. Предмет договора</b>
+  1.1. Исполнитель обязуется оказать ${esc(val('dog_subject'))||'услуги'} (далее — Услуги), а Заказчик обязуется принять и оплатить их в порядке и на условиях настоящего договора.</div>
+
+  <div class="clause"><b>2. Стоимость и порядок расчётов</b>
+  2.1. Стоимость Услуг составляет ${price?fmt(price)+' ('+rub2words(price).toLowerCase()+')':'__________'} рублей${(+val('nds_mode'))?', в том числе НДС '+val('nds_mode')+'%':', НДС не облагается'}.<br>
+  2.2. ${ (prepay>0&&prepay<100)?`Заказчик вносит предоплату в размере ${prepay}% от стоимости в течение 3 (трёх) рабочих дней с даты подписания договора; окончательный расчёт — в течение 3 рабочих дней с даты подписания акта.`:'Оплата производится в течение 5 (пяти) рабочих дней с даты подписания акта сдачи-приёмки.' }<br>
+  2.3. Обязательство по оплате считается исполненным с момента поступления денежных средств на расчётный счёт Исполнителя.</div>
+
+  <div class="clause"><b>3. Сроки и порядок сдачи-приёмки</b>
+  3.1. Услуги оказываются ${esc(val('dog_term'))||'в согласованные сторонами сроки'}.<br>
+  3.2. По завершении Исполнитель направляет Заказчику акт сдачи-приёмки. Заказчик обязан подписать акт либо направить мотивированный отказ в течение 5 (пяти) рабочих дней. При отсутствии ответа Услуги считаются принятыми.</div>
+
+  <div class="clause"><b>4. Права и обязанности сторон</b>
+  4.1. Исполнитель обязуется оказать Услуги надлежащего качества и в установленный срок.<br>
+  4.2. Заказчик обязуется предоставить необходимую информацию и материалы, а также своевременно оплатить Услуги.</div>
+
+  <div class="clause"><b>5. Ответственность сторон</b>
+  5.1. За нарушение сроков оплаты Заказчик уплачивает пеню в размере 0,1% от просроченной суммы за каждый день просрочки, но не более 10% от стоимости.<br>
+  5.2. В остальном стороны несут ответственность в соответствии с законодательством РФ.</div>
+
+  <div class="clause"><b>6. Прочие условия</b>
+  6.1. Договор вступает в силу с момента подписания и действует до полного исполнения обязательств.<br>
+  6.2. Все споры разрешаются путём переговоров, а при недостижении согласия — в суде по месту нахождения ответчика.<br>
+  6.3. Договор составлен в двух экземплярах, имеющих равную юридическую силу.</div>
+
+  <div class="clause"><b>7. Реквизиты и подписи сторон</b></div>
+  <table style="margin-top:4px"><tr>
+    <td style="width:50%"><b>Исполнитель</b><br><span class="req small">${supplierBlock()}<br>${(val('sup_rs')?'Р/с '+esc(val('sup_rs'))+'<br>':'')}${(val('sup_bank')?esc(val('sup_bank'))+'<br>':'')}${(val('sup_bik')?'БИК '+esc(val('sup_bik')):'')}</span><br><br>______________ / ______________</td>
+    <td style="width:50%"><b>Заказчик</b><br><span class="req small">${clientBlock()}</span><br><br>______________ / ______________</td>
+  </tr></table>`;
+}
+
+const TEMPLATES={schet:tplSchet,kp:tplKp,akt:tplAkt,dogovor:tplDogovor};
+
+/* ---------- render ---------- */
+function render(){ $('sheet').innerHTML = TEMPLATES[DOC](); }
+
+/* ---------- doc switching / visibility ---------- */
+function applyVisibility(){
+  document.querySelectorAll('[data-show]').forEach(el=>{
+    el.style.display = el.dataset.show.split(' ').includes(DOC)?'':'none';
+  });
+  document.querySelectorAll('[data-bankonly]').forEach(el=>{
+    el.style.display = (DOC==='schet'||DOC==='dogovor')?'':'none';
+  });
+  const titles={schet:'Параметры счёта',kp:'Параметры предложения',akt:'Параметры акта',dogovor:'Параметры договора'};
+  $('meta-title').textContent=titles[DOC];
+  const lblN={schet:'Номер счёта',kp:'Номер',akt:'Номер акта',dogovor:'Номер договора'};
+  $('lbl-num').textContent=lblN[DOC];
+  $('lbl-sup-name').textContent = DOC==='kp'?'Ваша компания':(DOC==='akt'||DOC==='dogovor')?'Исполнитель (наименование / ИП)':'Поставщик (наименование / ИП)';
+  $('lbl-cli-name').textContent = (DOC==='akt'||DOC==='dogovor')?'Заказчик':'Контрагент / покупатель';
+  $('pos-title').textContent = DOC==='kp'?'Состав предложения':'Позиции';
+  renderPosEditor();
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+  t.setAttribute('aria-selected','true'); DOC=t.dataset.doc; applyVisibility(); render();
+}));
+
+/* ---------- localStorage for supplier ---------- */
+function loadSaved(){ try{const d=JSON.parse(localStorage.getItem('rk_docs_supplier')||'{}');
+  document.querySelectorAll('[data-save]').forEach(i=>{if(d[i.id]!=null)i.value=d[i.id];});}catch(e){} }
+function saveSupplier(){ const d={}; document.querySelectorAll('[data-save]').forEach(i=>d[i.id]=i.value);
+  try{localStorage.setItem('rk_docs_supplier',JSON.stringify(d));}catch(e){} }
+
+/* ---------- export .doc ---------- */
+function exportDoc(){
+  const inner=$('sheet').innerHTML;
+  const names={schet:'Счет',kp:'Коммерческое_предложение',akt:'Акт',dogovor:'Договор_услуг'};
+  const html=`<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+  <head><meta charset="utf-8"><title>${names[DOC]}</title>
+  <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View></w:WordDocument></xml><![endif]-->
+  <style>
+    @page{size:A4;margin:2cm}
+    body{font-family:'Times New Roman',serif;font-size:12pt;color:#000;line-height:1.4}
+    h2{font-size:14pt;text-align:center;margin:0 0 4pt}
+    table{border-collapse:collapse;width:100%;font-size:11pt}
+    th,td{border:1px solid #000;padding:4pt 6pt;vertical-align:top}
+    th{background:#eee;text-align:center}
+    .num{text-align:right} .c{text-align:center} .center{text-align:center} .right{text-align:right}
+    .small{font-size:9.5pt} .muted{color:#555} .req{font-size:10.5pt} .empty{color:#999}
+    .sign{margin-top:30pt} .sline{border-bottom:1px solid #000;height:20pt} hr{border:0;border-top:1px solid #000}
+  </style></head><body>${inner}</body></html>`;
+  const blob=new Blob(['\ufeff',html],{type:'application/msword'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`${names[DOC]}_${val('doc_num')||'1'}.doc`; a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ---------- bindings ---------- */
+$('btnPrint').addEventListener('click',()=>window.print());
+$('btnDoc').addEventListener('click',exportDoc);
+$('btnClear').addEventListener('click',()=>{
+  ['cli_name','cli_inn','cli_kpp','cli_addr','doc_num','contract_ref','kp_title'].forEach(id=>{if($(id))$(id).value=(id==='doc_num'?'1':'');});
+  render();
+});
+document.addEventListener('input',e=>{
+  if(e.target.matches('[data-save]')) saveSupplier();
+  if(e.target.closest('.controls') && !e.target.closest('#pos-list')) render();
+});
+
+/* ---------- init ---------- */
+(function init(){
+  positions.schet=[{name:'Услуга / товар',qty:1,unit:'шт.',price:0}];
+  positions.akt=[{name:'Оказание услуг',qty:1,unit:'усл.',price:0}];
+  positions.kp=[{name:'',qty:1,unit:'усл.',price:0}];
+  $('doc_date').value=new Date().toISOString().slice(0,10);
+  loadSaved(); applyVisibility(); render();
+})();
+</script>
+</body>
+</html>
