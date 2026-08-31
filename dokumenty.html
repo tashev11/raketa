@@ -54,6 +54,7 @@ header{padding:26px 0 8px}
 
 /* ── layout ── */
 .grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:22px;align-items:start;padding-bottom:60px}
+.grid>*{min-width:0}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 
 /* ── controls ── */
@@ -120,7 +121,7 @@ select{appearance:none;background-image:url("data:image/svg+xml;charset=utf-8,%3
 .foot{border-top:1px solid var(--line);background:rgba(255,255,255,.5);margin-top:10px}
 .foot .wrap{padding:30px 20px 40px}
 .funnel{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
-@media(max-width:680px){.funnel{grid-template-columns:1fr}.row3{grid-template-columns:1fr}.pos-row,.pos-head{grid-template-columns:1fr 44px 40px 64px 22px;gap:4px}}
+@media(max-width:680px){.funnel{grid-template-columns:1fr}.row3{grid-template-columns:1fr}.pos-row,.pos-head{grid-template-columns:1fr 44px 40px 64px 22px;gap:4px}.sheetwrap{padding:12px}.sheet{padding:24px 20px}}
 .fcard{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;transition:.15s}
 .fcard:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
 .fcard .k{font-weight:700;font-size:14.5px;margin-bottom:3px}
