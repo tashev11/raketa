@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ракета — портал для бизнеса</title>
-<meta name="description" content="Бесплатные инструменты для малого бизнеса: 83 готовых шаблона документов, калькуляторы налогов 2026, НДС и взносов ИП. Всё работает в браузере, без регистрации.">
+<meta name="description" content="Бесплатные инструменты для малого бизнеса: 83 готовых шаблона документов, калькуляторы налогов 2026, НДС и взносов ИП. Всё считается в вашем браузере — данные никуда не уходят.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Ракета">
 <meta property="og:url" content="https://tashev11.github.io/raketa/">
 <meta property="og:title" content="Ракета — портал для бизнеса">
-<meta property="og:description" content="Бесплатные инструменты для малого бизнеса: 83 готовых шаблона документов, калькуляторы налогов 2026, НДС и взносов ИП. Всё работает в браузере, без регистрации.">
+<meta property="og:description" content="Бесплатные инструменты для малого бизнеса: 83 готовых шаблона документов, калькуляторы налогов 2026, НДС и взносов ИП. Всё считается в вашем браузере — данные никуда не уходят.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%23EA4E1B'/%3E%3Cpath d='M12 4l2 5.5L19.5 11 14 12.5 12 18l-2-5.5L4.5 11 10 9.5z' fill='%23fff'/%3E%3C/svg%3E">
-<script src="./support.js"></script>
+<script src="./support.js?v=2"></script>
 </head>
 <body>
 <x-dc>
@@ -3159,25 +3159,14 @@ class Component extends DCLogic {
     }));
     const draft = s.templateDraft;
     const isLoanTemplate = selectedTemplate.form === 'loan' || selectedTemplate.id === 'dogovor-zayma';
-    const isReadyTemplate = selectedTemplate.status === 'ready';
-    const fillButtonText = isReadyTemplate ? 'Заполнить документ' : 'Собрать черновик';
-    const selectedTemplateTimeLabel = isReadyTemplate ? 'Заполнение' : 'Черновик';
-    const templatePreviewNote = isReadyTemplate
-      ? 'После заполнения документ можно сохранить в кабинете и скачать.'
-      : 'Это каталожная запись: после входа можно собрать первичный черновик и доработать его перед подписанием.';
-    const notLoggedTemplateHint = isReadyTemplate
-      ? 'Просмотр — без регистрации. Вход понадобится только для заполнения и сохранения документа.'
-      : 'Просмотр — без регистрации. Вход понадобится, чтобы собрать и сохранить каталожный черновик.';
-    const loggedTemplateHint = isReadyTemplate
-      ? 'Вы уже вошли — кнопка сразу откроет форму заполнения и сохранение в кабинете.'
-      : 'Вы уже вошли — кнопка откроет универсальную форму для черновика по структуре каталога.';
-    const fillFormIntro = isReadyTemplate
-      ? 'Заполните поля — черновик сохранится в кабинете, а готовый документ можно скачать в Word.'
-      : 'Заполните основные поля — Ракета соберёт каталожный черновик, который нужно проверить перед использованием.';
-    const fillFormNote = isReadyTemplate
-      ? 'Перед использованием проверьте заполненные данные — скачанный файл можно доработать в Word.'
-      : 'Каталожный черновик помогает начать документ, но не заменяет проверенный шаблон или консультацию юриста.';
-    const downloadButtonText = isReadyTemplate ? 'Скачать .doc' : 'Скачать черновик .doc';
+    const fillButtonText = 'Заполнить документ';
+    const selectedTemplateTimeLabel = 'Заполнение';
+    const templatePreviewNote = 'После заполнения документ можно сохранить в кабинете и скачать.';
+    const notLoggedTemplateHint = 'Просмотр — без регистрации. Вход понадобится только для заполнения и сохранения документа.';
+    const loggedTemplateHint = 'Вы уже вошли — кнопка сразу откроет форму заполнения и сохранение в кабинете.';
+    const fillFormIntro = 'Заполните поля — черновик сохранится в кабинете, а готовый документ можно скачать в Word.';
+    const fillFormNote = 'Перед использованием проверьте заполненные данные — скачанный файл можно доработать в Word.';
+    const downloadButtonText = 'Скачать .doc';
     const partyALabel = selectedTemplate.partyALabel || 'Сторона 1';
     const partyBLabel = selectedTemplate.partyBLabel || 'Сторона 2';
     const partyAPlaceholder = isLoanTemplate ? 'Иванов Иван Иванович' : 'ООО, ИП или ФИО';

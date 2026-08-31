@@ -82,7 +82,11 @@
   function valueFromTemplate(raw, ctx) {
     const trimmed = String(raw || '').trim();
     const exact = trimmed.match(/^\{\{\s*([\s\S]+?)\s*\}\}$/);
-    if (exact) return evalInContext(exact[1], ctx);
+    // «Точное» совпадение — только когда во всей строке ровно одна подстановка:
+    // иначе «{{ a }} · {{ b }}» целиком принимается за одно выражение и ломается.
+    if (exact && exact[1].indexOf('{{') === -1 && exact[1].indexOf('}}') === -1) {
+      return evalInContext(exact[1], ctx);
+    }
     return String(raw || '').replace(/\{\{\s*([\s\S]+?)\s*\}\}/g, function (_, expr) {
       const val = evalInContext(expr, ctx);
       return val == null ? '' : String(val);
