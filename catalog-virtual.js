@@ -6,10 +6,10 @@
 
   const MAX_RESULTS = 24;
   const docsByMode = {
-    service: ['dogovor-uslug','akt-vypolnennyh-rabot','schet','kommercheskoe-predlozhenie','pretenziya'],
-    work: ['dogovor-podryada','akt-vypolnennyh-rabot','schet','kommercheskoe-predlozhenie','pretenziya'],
-    supply: ['dogovor-postavki','akt-sverki','schet','kommercheskoe-predlozhenie','pretenziya'],
-    rent: ['dogovor-arendy-oborudovaniya','akt-priema-peredachi','schet','kommercheskoe-predlozhenie','pretenziya']
+    service: ['dogovor-uslug','acceptance-services','akt-vypolnennyh-rabot','schet','invoice-offer','kommercheskoe-predlozhenie','additional-agreement','termination-agreement','guarantee-letter','payment-demand','pretenziya','service-claim'],
+    work: ['dogovor-podryada','akt-vypolnennyh-rabot','defect-act','inspection-act','acceptance-transfer','schet','invoice-offer','kommercheskoe-predlozhenie','additional-agreement','termination-agreement','payment-demand','service-claim'],
+    supply: ['dogovor-postavki','akt-sverki','discrepancy-act','schet','invoice-offer','packing-list','kommercheskoe-predlozhenie','additional-agreement','termination-agreement','payment-demand','quality-claim','delivery-claim','penalty-demand'],
+    rent: ['dogovor-arendy-oborudovaniya','equipment-transfer-act','acceptance-transfer','damage-act','inspection-act','schet','invoice-offer','kommercheskoe-predlozhenie','additional-agreement','termination-agreement','payment-demand','pretenziya']
   };
 
   function norm(value) {
@@ -158,8 +158,6 @@
     let total = 0;
 
     pairs.forEach(function (pair) {
-      // Сначала отсекаем пары ниша/услуга, не связанные с запросом.
-      // Общие слова типа «договор» проверятся на следующем этапе по базовому документу.
       const hasContextTerm = terms.some(function (term) { return pair.search.indexOf(term) !== -1; });
       if (!hasContextTerm) return;
 
@@ -200,9 +198,7 @@
     const originalSubmitSearch = proto.submitSearch;
     const originalDownloadSavedDoc = proto.downloadSavedDoc;
 
-    proto.templateCatalog = function () {
-      return originalCatalog.call(this);
-    };
+    proto.templateCatalog = function () { return originalCatalog.call(this); };
 
     proto.selectedTemplate = function () {
       const virtual = resolveVariant(this, this.state && this.state.selectedTemplateId);
@@ -230,15 +226,7 @@
       const virtual = searchVirtual(this, query, 18);
       const originalResults = Array.isArray(vals.searchResults) ? vals.searchResults : [];
       const virtualResults = virtual.items.map(function (t) {
-        return {
-          href: '#template=' + encodeURIComponent(t.id),
-          templateId: t.id,
-          title: t.title,
-          kind: t.kind + ' · ' + t.rkNiche,
-          desc: t.description,
-          meta: t.rkService + ' · ' + t.rkParty + ' · ' + t.time,
-          accent: '#EA4E1B'
-        };
+        return {href:'#template='+encodeURIComponent(t.id),templateId:t.id,title:t.title,kind:t.kind+' · '+t.rkNiche,desc:t.description,meta:t.rkService+' · '+t.rkParty+' · '+t.time,accent:'#EA4E1B'};
       });
       const merged = virtualResults.concat(originalResults).slice(0, MAX_RESULTS);
       const originalTotal = Number(String(vals.searchSummaryText || '').replace(/\D/g, '')) || originalResults.length;
@@ -257,25 +245,14 @@
         vals.searchMoreText = vals.hasSearchMore ? ('Показаны первые ' + merged.length + ' из ' + resultTotal.toLocaleString('ru-RU') + '. Уточните нишу, услугу или тип документа.') : '';
       }
 
-      RK.meta = {
-        baseTemplates: baseCount,
-        variants: variants,
-        total: allCount,
-        niches: RK.niches.length,
-        services: RK.services.length,
-        parties: RK.parties.length,
-        pairs: pairs.length
-      };
+      RK.meta = {baseTemplates:baseCount,variants:variants,total:allCount,niches:RK.niches.length,services:RK.services.length,parties:RK.parties.length,pairs:pairs.length};
       return vals;
     };
 
     proto.submitSearch = function () {
       const query = this.state && this.state.searchQuery ? this.state.searchQuery : '';
       const virtual = searchVirtual(this, query, 1);
-      if (virtual.items.length) {
-        this.openTemplate(virtual.items[0].id);
-        return;
-      }
+      if (virtual.items.length) { this.openTemplate(virtual.items[0].id); return; }
       return originalSubmitSearch.call(this);
     };
 
@@ -287,13 +264,6 @@
     };
   }
 
-  RK.virtual = {
-    pairs: pairs,
-    docsByMode: docsByMode,
-    search: searchVirtual,
-    resolve: resolveVariant,
-    totalVariants: totalVariants,
-    materialize: materialize
-  };
+  RK.virtual = {pairs:pairs,docsByMode:docsByMode,search:searchVirtual,resolve:resolveVariant,totalVariants:totalVariants,materialize:materialize};
   RK.install = install;
 })();
