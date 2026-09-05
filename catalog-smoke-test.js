@@ -25,6 +25,7 @@ function load(file) {
 
 load('catalog-runtime.js');
 load('catalog-extra.js');
+load('catalog-extra-2.js');
 load('catalog-virtual.js');
 load('catalog-policy.js');
 
@@ -90,9 +91,9 @@ const app = new Component();
 
 const initial = app.renderVals();
 const total = Number(String(initial.catalogCountText).replace(/\D/g,''));
-assert(total >= 50000, `ожидалось не менее 50 000 вариантов после расширения, получено ${total}`);
-assert(RK.niches.length >= 180, `ожидалось не менее 180 ниш, получено ${RK.niches.length}`);
-assert(RK.services.length >= 180, `ожидалось не менее 180 услуг, получено ${RK.services.length}`);
+assert(total >= 100000, `ожидалось не менее 100 000 вариантов после второго расширения, получено ${total}`);
+assert(RK.niches.length >= 300, `ожидалось не менее 300 ниш, получено ${RK.niches.length}`);
+assert(RK.services.length >= 250, `ожидалось не менее 250 услуг, получено ${RK.services.length}`);
 assert.strictEqual(app.templateCatalog().length, baseTemplates.length, 'виртуальный каталог не должен раздувать основной массив');
 
 app.state.searchQuery = 'SEO стоматология';
@@ -128,6 +129,14 @@ app.state.searchQuery = '1С производство';
 const oneC = app.renderVals();
 assert(oneC.searchResults.some(r => /1С/i.test(r.title + ' ' + r.desc)), 'расширенный справочник должен находить 1С для производства');
 
+app.state.searchQuery = 'SOC кибербезопасность';
+const soc = app.renderVals();
+assert(soc.searchResults.length > 0, 'второй слой должен находить SOC/кибербезопасность');
+
+app.state.searchQuery = 'аренда спецтехники строительство';
+const equipment = app.renderVals();
+assert(equipment.searchResults.length > 0, 'второй слой должен находить аренду спецтехники');
+
 console.log(JSON.stringify({
   ok:true,
   total,
@@ -136,5 +145,7 @@ console.log(JSON.stringify({
   parties:RK.parties.length,
   pairs:RK.meta && RK.meta.pairs,
   seoResults:seo.searchResults.length,
-  oneCResults:oneC.searchResults.length
+  oneCResults:oneC.searchResults.length,
+  socResults:soc.searchResults.length,
+  equipmentResults:equipment.searchResults.length
 }, null, 2));
