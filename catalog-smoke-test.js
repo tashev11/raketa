@@ -31,6 +31,7 @@ load('document-taxonomy.js');
 load('document-base-extra.js');
 load('catalog-virtual.js');
 load('catalog-policy.js');
+load('document-search.js');
 
 const RK = sandbox.window.RKCatalog;
 const Tax = sandbox.window.RKDocumentTaxonomy;
@@ -133,6 +134,15 @@ const vat = app.renderVals();
 assert.strictEqual(vat.searchResults.length, 0, 'общий запрос НДС не должен разворачивать отраслевые варианты');
 app.submitSearch();
 assert(app.baseSubmitCalled === true, 'общий запрос должен оставаться в базовом поиске');
+
+app.state.searchQuery = 'завещание';
+const willSearch = app.renderVals();
+assert(willSearch.searchResults.some(r => /Завещание/i.test(r.title)), 'главный поиск должен находить завещание как отдельный вид документа');
+assert(willSearch.searchResults.some(r => /Нотариаль/i.test(r.desc + ' ' + r.meta)), 'завещание должно быть явно помечено как особый/нотариальный документ');
+
+app.state.searchQuery = 'расписка задаток';
+const receiptSearch = app.renderVals();
+assert(receiptSearch.searchResults.some(r => /Расписка/i.test(r.title)), 'главный поиск должен находить готовые расписки');
 
 app.state.searchQuery = 'аренда оборудования мероприятие';
 const rent = app.renderVals();
