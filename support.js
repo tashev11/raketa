@@ -259,6 +259,9 @@
 
     const source = root.innerHTML;
     const Component = Function('DCLogic', logicScript.textContent + '\nreturn Component;')(DCLogic);
+    if (window.RKDocumentBase && typeof window.RKDocumentBase.install === 'function') {
+      try { window.RKDocumentBase.install(Component); } catch (error) { console.error('Raketa document base install failed', error); }
+    }
     if (window.RKCatalog && typeof window.RKCatalog.install === 'function') {
       try { window.RKCatalog.install(Component); } catch (error) { console.error('Raketa catalog install failed', error); }
     }
@@ -364,6 +367,7 @@
       await loadScript('./catalog-extra-2.js?v=1');
       await loadScript('./catalog-extra-3.js?v=1');
       await loadScript('./document-taxonomy.js?v=1');
+      await loadScript('./document-base-extra.js?v=1');
       await loadScript('./catalog-virtual.js?v=2');
       await loadScript('./catalog-policy.js?v=2');
     } catch (error) {
