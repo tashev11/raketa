@@ -370,6 +370,7 @@
       await loadScript('./document-base-extra.js?v=1');
       await loadScript('./catalog-virtual.js?v=2');
       await loadScript('./catalog-policy.js?v=2');
+      await loadScript('./document-search.js?v=1');
     } catch (error) {
       console.warn('Raketa catalog runtime unavailable, starting base portal', error);
     }
