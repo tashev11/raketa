@@ -13,6 +13,11 @@
       .trim();
   }
 
+  const stopWords = new Set([
+    'договор','договоры','акт','акты','счет','счёт','счета','счёта','документ','документы','шаблон','шаблоны',
+    'услуга','услуги','работа','работы','ип','ооо','ндс','оплата','претензия','коммерческое','предложение'
+  ]);
+
   const contextDictionary = [];
   RK.niches.forEach(function (n) {
     contextDictionary.push(norm(n.name));
@@ -28,7 +33,7 @@
     if (q.length < 2) return false;
     const terms = q.split(/\s+/).filter(Boolean);
     return terms.some(function (term) {
-      if (term.length < 2) return false;
+      if (term.length < 2 || stopWords.has(term)) return false;
       return contextDictionary.some(function (entry) {
         return entry === term || entry.indexOf(term) !== -1 || term.indexOf(entry) !== -1;
       });
