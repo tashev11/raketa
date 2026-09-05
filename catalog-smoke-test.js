@@ -10,6 +10,7 @@ load('catalog-runtime.js');
 load('catalog-extra.js');
 load('catalog-extra-2.js');
 load('catalog-extra-3.js');
+load('catalog-extra-4.js');
 load('document-taxonomy.js');
 load('document-base-extra.js');
 load('document-base-extra-2.js');
@@ -64,14 +65,17 @@ assert.strictEqual(new Set(ids).size, ids.length, 'в основном ката�
 [
   'additional-agreement','debt-repayment-agreement','setoff-agreement','acceptance-services','defect-act','loan-receipt','bank-power','refund-application','agency-contract','rent-apartment','software-development','accounting-services','founder-decision','privacy-policy','public-offer','sla','technical-specification','invoice-offer','quality-claim','employment-offer','handover-employee'
 ].forEach(id => assert(baseList.some(x => x.id === id), `готовая основа ${id} должна присутствовать`));
-assert(Tax.ready.length >= 80, `ожидалось не менее 80 готовых видов документов, получено ${Tax.ready.length}`);
+assert(Tax.ready.length >= 100, `ожидалось не менее 100 готовых видов документов, получено ${Tax.ready.length}`);
 
 const initial = app.renderVals();
 const total = Number(String(initial.catalogCountText).replace(/\D/g,''));
-assert(total >= 100000, `ожидалось не менее 100 000 отраслевых вариантов, получено ${total}`);
-assert(RK.niches.length >= 380, `ожидалось не менее 380 ниш, получено ${RK.niches.length}`);
-assert(RK.services.length >= 320, `ожидалось не менее 320 услуг, получено ${RK.services.length}`);
-assert(baseList.length < 250, 'виртуальные отраслевые варианты не должны физически раздувать основной массив');
+assert(total >= 200000, `ожидалось не менее 200 000 отраслевых вариантов, получено ${total}`);
+assert(RK.niches.length >= 450, `ожидалось не менее 450 ниш, получено ${RK.niches.length}`);
+assert(RK.services.length >= 400, `ожидалось не менее 400 услуг, получено ${RK.services.length}`);
+assert(baseList.length < 300, 'виртуальные отраслевые варианты не должны физически раздувать основной массив');
+assert(RK.virtual.docsByMode.service.length >= 12, 'для услуг должен быть полный комплект документов');
+assert(RK.virtual.docsByMode.supply.length >= 13, 'для поставки должен быть расширенный комплект документов');
+assert(RK.virtual.docsByMode.rent.length >= 12, 'для аренды должен быть расширенный комплект документов');
 
 app.state.searchQuery = 'SEO стоматология';
 const seo = app.renderVals();
@@ -93,16 +97,18 @@ assert(willSearch.searchResults.some(r => /Завещание/i.test(r.title)), 
 assert(willSearch.searchResults.some(r => /Нотариаль/i.test(r.desc + ' ' + r.meta)), 'завещание должно быть явно помечено как нотариальное');
 
 app.state.searchQuery = 'публичная оферта';
-assert(app.renderVals().searchResults.some(r => /Публичная оферта/i.test(r.title)), 'поиск должен находить новую готовую публичную оферту');
+assert(app.renderVals().searchResults.some(r => /Публичная оферта/i.test(r.title)), 'поиск должен находить публичную оферту');
 app.state.searchQuery = 'акт передачи исходного кода';
 assert(app.renderVals().searchResults.some(r => /исходного кода/i.test(r.title)), 'поиск должен находить IT-акты');
 app.state.searchQuery = 'претензия качество товара';
 assert(app.renderVals().searchResults.some(r => /качеству товара/i.test(r.title)), 'поиск должен находить специализированные претензии');
 app.state.searchQuery = 'аренда оборудования мероприятие';
 assert(app.renderVals().searchResults.some(r => r.templateId && r.templateId.indexOf('rk--') === 0), 'должен существовать отраслевой вариант аренды оборудования');
-app.state.searchQuery = 'SOC кибербезопасность';
-assert(app.renderVals().searchResults.length > 0, 'должен работать поиск SOC/кибербезопасности');
-app.state.searchQuery = 'морская перевозка нефтесервис';
-assert(app.renderVals().searchResults.length > 0, 'третий отраслевой слой должен участвовать в поиске');
+app.state.searchQuery = 'ремонт холодильников сервис';
+assert(app.renderVals().searchResults.length > 0, 'четвёртый слой массовых услуг должен участвовать в поиске');
+app.state.searchQuery = 'репетитор английский';
+assert(app.renderVals().searchResults.length > 0, 'четвёртый слой образования должен участвовать в поиске');
+app.state.searchQuery = 'неразрушающий контроль промышленность';
+assert(app.renderVals().searchResults.length > 0, 'четвёртый слой промышленного сервиса должен участвовать в поиске');
 
-console.log(JSON.stringify({ok:true,total,baseTemplates:baseList.length,documentTypes:Tax.items.length,documentGroups:Tax.groups.length,readyTaxonomy:Tax.ready.length,niches:RK.niches.length,services:RK.services.length,parties:RK.parties.length}, null, 2));
+console.log(JSON.stringify({ok:true,total,baseTemplates:baseList.length,documentTypes:Tax.items.length,documentGroups:Tax.groups.length,readyTaxonomy:Tax.ready.length,niches:RK.niches.length,services:RK.services.length,parties:RK.parties.length,serviceDocs:RK.virtual.docsByMode.service.length,supplyDocs:RK.virtual.docsByMode.supply.length}, null, 2));
