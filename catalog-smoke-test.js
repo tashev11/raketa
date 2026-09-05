@@ -24,6 +24,7 @@ function load(file) {
 }
 
 load('catalog-runtime.js');
+load('catalog-extra.js');
 load('catalog-virtual.js');
 load('catalog-policy.js');
 
@@ -89,7 +90,9 @@ const app = new Component();
 
 const initial = app.renderVals();
 const total = Number(String(initial.catalogCountText).replace(/\D/g,''));
-assert(total >= 10000, `ожидалось не менее 10 000 вариантов, получено ${total}`);
+assert(total >= 50000, `ожидалось не менее 50 000 вариантов после расширения, получено ${total}`);
+assert(RK.niches.length >= 180, `ожидалось не менее 180 ниш, получено ${RK.niches.length}`);
+assert(RK.services.length >= 180, `ожидалось не менее 180 услуг, получено ${RK.services.length}`);
 assert.strictEqual(app.templateCatalog().length, baseTemplates.length, 'виртуальный каталог не должен раздувать основной массив');
 
 app.state.searchQuery = 'SEO стоматология';
@@ -121,6 +124,10 @@ app.state.selectedTemplateId = rentVariant.templateId;
 const rentResolved = app.selectedTemplate();
 assert.strictEqual(rentResolved.rkBaseId, 'dogovor-arendy-oborudovaniya', 'аренда оборудования должна использовать профильный базовый договор');
 
+app.state.searchQuery = '1С производство';
+const oneC = app.renderVals();
+assert(oneC.searchResults.some(r => /1С/i.test(r.title + ' ' + r.desc)), 'расширенный справочник должен находить 1С для производства');
+
 console.log(JSON.stringify({
   ok:true,
   total,
@@ -128,5 +135,6 @@ console.log(JSON.stringify({
   services:RK.services.length,
   parties:RK.parties.length,
   pairs:RK.meta && RK.meta.pairs,
-  seoResults:seo.searchResults.length
+  seoResults:seo.searchResults.length,
+  oneCResults:oneC.searchResults.length
 }, null, 2));
