@@ -1,6 +1,11 @@
 (function(){
 'use strict';
 const RK=window.RKCatalog,T=window.RKDocumentTaxonomy;if(!RK||!T||typeof RK.install!=='function')return;
+if(window.RKDocumentBase&&Array.isArray(window.RKDocumentBase.templates)){
+  const readyIds=new Set(window.RKDocumentBase.templates.map(x=>x.id));
+  T.items.forEach(x=>{if(readyIds.has(x.id)){x.status='ready';x.statusLabel='Готовая основа'}});
+  T.ready=T.items.filter(x=>x.status==='ready');T.planned=T.items.filter(x=>x.status!=='ready');
+}
 function norm(v){return String(v||'').toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-я0-9]+/gi,' ').replace(/\s+/g,' ').trim()}
 function findTypes(raw,limit){const q=norm(raw);if(q.length<2)return[];const terms=q.split(' ');return T.items.map(x=>{const hay=norm(x.title+' '+x.groupName+' '+x.statusLabel);if(!terms.every(t=>hay.includes(t)))return null;let score=0;const title=norm(x.title);if(title===q)score+=200;if(title.startsWith(q))score+=100;if(title.includes(q))score+=60;terms.forEach(t=>{if(title.includes(t))score+=20});return{x,score}}).filter(Boolean).sort((a,b)=>b.score-a.score||a.x.title.localeCompare(b.x.title,'ru')).slice(0,limit||12).map(v=>v.x)}
 const previousInstall=RK.install;
