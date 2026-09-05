@@ -362,6 +362,8 @@
       await loadScript('./catalog-runtime.js?v=3');
       await loadScript('./catalog-extra.js?v=1');
       await loadScript('./catalog-extra-2.js?v=1');
+      await loadScript('./catalog-extra-3.js?v=1');
+      await loadScript('./document-taxonomy.js?v=1');
       await loadScript('./catalog-virtual.js?v=2');
       await loadScript('./catalog-policy.js?v=2');
     } catch (error) {
