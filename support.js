@@ -50,27 +50,13 @@
     function render() { if (rendering) return; rendering = true; const focus = captureFocus(root); const vals = typeof instance.renderVals === 'function' ? instance.renderVals() : {}; const ctx = Object.assign({}, vals, { state: instance.state, props: instance.props }); const template = document.createElement('template'); template.innerHTML = source; processFragment(template.content, ctx, function (el, attrEvent, handler) { const eventName = eventNameFor(attrEvent, el); el.addEventListener(eventName, function (event) { if (eventName === 'click') event.preventDefault(); if (shouldPassEvent(attrEvent)) handler(event); else handler(); }); }); root.replaceChildren(template.content); const aside = root.querySelector('aside'); document.body.classList.toggle('rk-app-view', !!aside); if (aside && aside.parentElement) { aside.parentElement.classList.add('rk-app-shell'); Array.from(root.children).forEach(function (child) { if (child !== aside.parentElement && !child.textContent.trim()) child.classList.add('rk-empty-shell-spacer'); }); } restoreFocus(root, focus); rendering = false; if (mounted && typeof instance._applyPin === 'function') requestAnimationFrame(function () { instance._applyPin(); }); }
     instance.__render = render; render(); mounted = true; if (typeof instance.componentDidMount === 'function') instance.componentDidMount(); handleHashRoute();
   }
+
   function loadScript(src) { return new Promise(function (resolve, reject) { const script = document.createElement('script'); script.src = src; script.async = false; script.onload = resolve; script.onerror = reject; document.head.appendChild(script); }); }
   async function start() {
     try {
-      await loadScript('./catalog-runtime.js?v=3');
-      await loadScript('./catalog-extra.js?v=1');
-      await loadScript('./catalog-extra-2.js?v=1');
-      await loadScript('./catalog-extra-3.js?v=1');
-      await loadScript('./catalog-extra-4.js?v=1');
-      await loadScript('./document-taxonomy.js?v=1');
-      await loadScript('./document-base-extra.js?v=1');
-      await loadScript('./document-base-extra-2.js?v=1');
-      await loadScript('./document-base-extra-3.js?v=1');
-      await loadScript('./document-base-contracts-2.js?v=1');
-      await loadScript('./document-base-corporate-it.js?v=1');
-      await loadScript('./document-base-commerce-claims.js?v=1');
-      await loadScript('./document-base-extra-4.js?v=1');
-      await loadScript('./document-taxonomy-sync.js?v=2');
-      await loadScript('./document-taxonomy-sync-2.js?v=1');
-      await loadScript('./catalog-virtual.js?v=3');
-      await loadScript('./catalog-policy.js?v=2');
-      await loadScript('./document-search.js?v=1');
+      await loadScript('./catalog-manifest.js?v=1');
+      const scripts = Array.isArray(window.RK_EXTENSION_SCRIPTS) ? window.RK_EXTENSION_SCRIPTS : [];
+      for (let i = 0; i < scripts.length; i++) await loadScript(scripts[i]);
     } catch (error) { console.warn('Raketa catalog runtime unavailable, starting base portal', error); }
     boot();
   }
