@@ -82,8 +82,6 @@
   function valueFromTemplate(raw, ctx) {
     const trimmed = String(raw || '').trim();
     const exact = trimmed.match(/^\{\{\s*([\s\S]+?)\s*\}\}$/);
-    // «Точное» совпадение — только когда во всей строке ровно одна подстановка:
-    // иначе «{{ a }} · {{ b }}» целиком принимается за одно выражение и ломается.
     if (exact && exact[1].indexOf('{{') === -1 && exact[1].indexOf('}}') === -1) {
       return evalInContext(exact[1], ctx);
     }
@@ -261,7 +259,11 @@
 
     const source = root.innerHTML;
     const Component = Function('DCLogic', logicScript.textContent + '\nreturn Component;')(DCLogic);
+    if (window.RKCatalog && typeof window.RKCatalog.install === 'function') {
+      try { window.RKCatalog.install(Component); } catch (error) { console.error('Raketa catalog install failed', error); }
+    }
     const instance = new Component(defaultsFromProps(logicScript));
+    window.__RaketaPortal = { Component: Component, instance: instance };
     let mounted = false;
     let rendering = false;
 
@@ -344,9 +346,30 @@
     handleHashRoute();
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
-  } else {
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = false;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  async function start() {
+    try {
+      await loadScript('./catalog-runtime.js?v=3');
+      await loadScript('./catalog-virtual.js?v=1');
+    } catch (error) {
+      console.warn('Raketa catalog runtime unavailable, starting base portal', error);
+    }
     boot();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
   }
 })();
