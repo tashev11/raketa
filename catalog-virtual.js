@@ -158,6 +158,11 @@
     let total = 0;
 
     pairs.forEach(function (pair) {
+      // Сначала отсекаем пары ниша/услуга, не связанные с запросом.
+      // Общие слова типа «договор» проверятся на следующем этапе по базовому документу.
+      const hasContextTerm = terms.some(function (term) { return pair.search.indexOf(term) !== -1; });
+      if (!hasContextTerm) return;
+
       const docs = docsByMode[pair.service.mode] || docsByMode.service;
       docs.forEach(function (docId) {
         const base = index[docId];
@@ -195,7 +200,6 @@
     const originalSubmitSearch = proto.submitSearch;
     const originalDownloadSavedDoc = proto.downloadSavedDoc;
 
-    // Важно: основной массив остаётся маленьким. Виртуальные варианты не добавляются в него.
     proto.templateCatalog = function () {
       return originalCatalog.call(this);
     };
