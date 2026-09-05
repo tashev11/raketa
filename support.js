@@ -368,6 +368,10 @@
       await loadScript('./catalog-extra-3.js?v=1');
       await loadScript('./document-taxonomy.js?v=1');
       await loadScript('./document-base-extra.js?v=1');
+      await loadScript('./document-base-extra-2.js?v=1');
+      await loadScript('./document-base-extra-3.js?v=1');
+      await loadScript('./document-base-contracts-2.js?v=1');
+      await loadScript('./document-taxonomy-sync.js?v=1');
       await loadScript('./catalog-virtual.js?v=2');
       await loadScript('./catalog-policy.js?v=2');
       await loadScript('./document-search.js?v=1');
