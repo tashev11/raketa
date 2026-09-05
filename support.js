@@ -65,7 +65,9 @@
       await loadScript('./document-base-contracts-2.js?v=1');
       await loadScript('./document-base-corporate-it.js?v=1');
       await loadScript('./document-base-commerce-claims.js?v=1');
+      await loadScript('./document-base-extra-4.js?v=1');
       await loadScript('./document-taxonomy-sync.js?v=2');
+      await loadScript('./document-taxonomy-sync-2.js?v=1');
       await loadScript('./catalog-virtual.js?v=3');
       await loadScript('./catalog-policy.js?v=2');
       await loadScript('./document-search.js?v=1');
