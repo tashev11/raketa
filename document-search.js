@@ -8,6 +8,18 @@ if(window.RKDocumentBase&&Array.isArray(window.RKDocumentBase.templates)){
 }
 function norm(v){return String(v||'').toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-я0-9]+/gi,' ').replace(/\s+/g,' ').trim()}
 function findTypes(raw,limit){const q=norm(raw);if(q.length<2)return[];const terms=q.split(' ');return T.items.map(x=>{const hay=norm(x.title+' '+x.groupName+' '+x.statusLabel);if(!terms.every(t=>hay.includes(t)))return null;let score=0;const title=norm(x.title);if(title===q)score+=200;if(title.startsWith(q))score+=100;if(title.includes(q))score+=60;terms.forEach(t=>{if(title.includes(t))score+=20});return{x,score}}).filter(Boolean).sort((a,b)=>b.score-a.score||a.x.title.localeCompare(b.x.title,'ru')).slice(0,limit||12).map(v=>v.x)}
+
+// catalog-virtual загружается после реальных пакетов и заменяет RK.install.
+// Возвращаем сохранённую цепочку реальных основ перед виртуальным слоем.
+if(typeof RK._installBeforeVirtual==='function' && RK.install!==RK._installBeforeVirtual){
+  const virtualInstall=RK.install;
+  const realInstall=RK._installBeforeVirtual;
+  RK.install=function(Component){
+    realInstall(Component);
+    virtualInstall(Component);
+  };
+}
+
 const previousInstall=RK.install;
 RK.install=function(Component){
   previousInstall(Component);
