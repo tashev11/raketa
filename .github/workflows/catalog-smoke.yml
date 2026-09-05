@@ -28,6 +28,7 @@ jobs:
         run: |
           node --check support.js
           node --check catalog-runtime.js
+          node --check catalog-extra.js
           node --check catalog-virtual.js
           node --check catalog-policy.js
           node --check catalog-smoke-test.js
