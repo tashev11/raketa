@@ -26,11 +26,18 @@ function load(file) {
 load('catalog-runtime.js');
 load('catalog-extra.js');
 load('catalog-extra-2.js');
+load('catalog-extra-3.js');
+load('document-taxonomy.js');
+load('document-base-extra.js');
 load('catalog-virtual.js');
 load('catalog-policy.js');
 
 const RK = sandbox.window.RKCatalog;
+const Tax = sandbox.window.RKDocumentTaxonomy;
+const DocBase = sandbox.window.RKDocumentBase;
 assert(RK, 'RKCatalog должен загрузиться');
+assert(Tax, 'таксономия документов должна загрузиться');
+assert(DocBase, 'дополнительные основы документов должны загрузиться');
 
 const baseTemplates = [
   ['dogovor-uslug','Договор оказания услуг','Договор'],
@@ -62,21 +69,15 @@ class Component {
   constructor() {
     this.state = { searchQuery:'', selectedTemplateId:'dogovor-uslug', templateDraft:{} };
   }
-
   templateCatalog() { return baseTemplates; }
   selectedTemplate() { return this.templateCatalog().find(t => t.id === this.state.selectedTemplateId) || this.templateCatalog()[0]; }
   defaultDraftFor() { return { city:'Казань', purpose:'', transfer_method:'', return_method:'', penalty:'' }; }
   plu(n, f) { n=Math.abs(n)%100; const n1=n%10; if(n>10&&n<20)return f[2]; if(n1>1&&n1<5)return f[1]; if(n1===1)return f[0]; return f[2]; }
   renderVals() {
     return {
-      searchResults:[],
-      searchSummaryText:'0 совпадений',
-      hasSearchResults:false,
-      searchNoResults:!!this.state.searchQuery,
-      hasSearchMore:false,
-      searchMoreText:'',
-      catalogCountText:String(this.templateCatalog().length),
-      readyTemplateCountText:String(this.templateCatalog().length)
+      searchResults:[], searchSummaryText:'0 совпадений', hasSearchResults:false,
+      searchNoResults:!!this.state.searchQuery, hasSearchMore:false, searchMoreText:'',
+      catalogCountText:String(this.templateCatalog().length), readyTemplateCountText:String(this.templateCatalog().length)
     };
   }
   submitSearch() { this.baseSubmitCalled = true; }
@@ -86,15 +87,31 @@ class Component {
   templateDocHtml() { return '<html></html>'; }
 }
 
+DocBase.install(Component);
 RK.install(Component);
 const app = new Component();
 
+assert(Tax.items.length >= 180, `ожидалось минимум 180 типов документов, получено ${Tax.items.length}`);
+assert(Tax.groups.length >= 12, 'должны быть отдельные группы документов');
+assert(Tax.items.some(x => x.id === 'will' && x.status === 'notary'), 'завещание должно быть в нотариальной категории');
+assert(Tax.items.some(x => /Расписка/.test(x.title)), 'в таксономии должны быть расписки');
+assert(Tax.items.some(x => /Доверенность/.test(x.title)), 'в таксономии должны быть доверенности');
+assert(Tax.items.some(x => x.group === 'acts'), 'в таксономии должны быть акты');
+assert(Tax.items.some(x => x.group === 'billing'), 'в таксономии должны быть счета и бухгалтерские формы');
+
+const baseList = app.templateCatalog();
+assert(baseList.some(x => x.id === 'additional-agreement'), 'дополнительное соглашение должно стать реальной основой');
+assert(baseList.some(x => x.id === 'termination-agreement'), 'соглашение о расторжении должно стать реальной основой');
+assert(baseList.some(x => x.id === 'deposit-receipt'), 'расписка о задатке/авансе должна стать реальной основой');
+assert(baseList.some(x => x.id === 'goods-power'), 'доверенность на получение товара должна стать реальной основой');
+assert(baseList.some(x => x.id === 'vacation-application'), 'заявление на отпуск должно стать реальной основой');
+
 const initial = app.renderVals();
 const total = Number(String(initial.catalogCountText).replace(/\D/g,''));
-assert(total >= 100000, `ожидалось не менее 100 000 вариантов после второго расширения, получено ${total}`);
-assert(RK.niches.length >= 300, `ожидалось не менее 300 ниш, получено ${RK.niches.length}`);
-assert(RK.services.length >= 250, `ожидалось не менее 250 услуг, получено ${RK.services.length}`);
-assert.strictEqual(app.templateCatalog().length, baseTemplates.length, 'виртуальный каталог не должен раздувать основной массив');
+assert(total >= 100000, `ожидалось не менее 100 000 отраслевых вариантов, получено ${total}`);
+assert(RK.niches.length >= 380, `ожидалось не менее 380 ниш после третьего слоя, получено ${RK.niches.length}`);
+assert(RK.services.length >= 320, `ожидалось не менее 320 услуг после третьего слоя, получено ${RK.services.length}`);
+assert(baseList.length < 200, 'виртуальные отраслевые варианты не должны физически раздувать основной массив');
 
 app.state.searchQuery = 'SEO стоматология';
 const seo = app.renderVals();
@@ -125,27 +142,21 @@ app.state.selectedTemplateId = rentVariant.templateId;
 const rentResolved = app.selectedTemplate();
 assert.strictEqual(rentResolved.rkBaseId, 'dogovor-arendy-oborudovaniya', 'аренда оборудования должна использовать профильный базовый договор');
 
-app.state.searchQuery = '1С производство';
-const oneC = app.renderVals();
-assert(oneC.searchResults.some(r => /1С/i.test(r.title + ' ' + r.desc)), 'расширенный справочник должен находить 1С для производства');
-
 app.state.searchQuery = 'SOC кибербезопасность';
-const soc = app.renderVals();
-assert(soc.searchResults.length > 0, 'второй слой должен находить SOC/кибербезопасность');
-
-app.state.searchQuery = 'аренда спецтехники строительство';
-const equipment = app.renderVals();
-assert(equipment.searchResults.length > 0, 'второй слой должен находить аренду спецтехники');
+assert(app.renderVals().searchResults.length > 0, 'должен работать поиск SOC/кибербезопасности');
+app.state.searchQuery = 'морская перевозка нефтесервис';
+assert(app.renderVals().searchResults.length > 0, 'третий отраслевой слой должен участвовать в поиске');
+app.state.searchQuery = 'обслуживание медицинского оборудования клиника';
+assert(app.renderVals().searchResults.length > 0, 'новые специализированные услуги должны участвовать в поиске');
 
 console.log(JSON.stringify({
   ok:true,
   total,
+  baseTemplates:baseList.length,
+  documentTypes:Tax.items.length,
+  documentGroups:Tax.groups.length,
+  readyTaxonomy:Tax.ready.length,
   niches:RK.niches.length,
   services:RK.services.length,
-  parties:RK.parties.length,
-  pairs:RK.meta && RK.meta.pairs,
-  seoResults:seo.searchResults.length,
-  oneCResults:oneC.searchResults.length,
-  socResults:soc.searchResults.length,
-  equipmentResults:equipment.searchResults.length
+  parties:RK.parties.length
 }, null, 2));
