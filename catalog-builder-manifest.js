@@ -21,5 +21,6 @@ window.RK_CATALOG_BUILDER_SCRIPTS = [
   './document-taxonomy-extra-11.js?v=1',
   './document-taxonomy-extra-12.js?v=1',
   './document-taxonomy-extra-13.js?v=1',
-  './document-taxonomy-extra-14.js?v=1'
+  './document-taxonomy-extra-14.js?v=1',
+  './document-taxonomy-extra-15.js?v=1'
 ];
