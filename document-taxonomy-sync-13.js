@@ -1,0 +1,6 @@
+(function(){
+'use strict';
+const T=window.RKDocumentTaxonomy;if(!T||!Array.isArray(T.items))return;
+const ids=['transport-request','forwarding-request','cargo-acceptance-act','cargo-damage-act','cargo-shortage-act','cargo-claim','demurrage-claim','route-sheet','cargo-instruction','goods-return-act','goods-return-application','exchange-application','warranty-claim','marketplace-supply-act','seller-offer','seller-policy','delivery-terms','return-policy','promotion-rules','gift-certificate-rules','debt-recognition-act','repayment-schedule','payment-schedule','interest-calculation','penalty-calculation','mutual-setoff-act','payment-deferral-request','debt-confirmation-letter','loan-repayment-act','author-order','exclusive-right-assignment','content-license','photo-release','model-release','content-acceptance-act','rights-transfer-act','design-rights-assignment'];
+const set=new Set(ids);T.items.forEach(x=>{if(set.has(x.id)){x.status='ready';x.statusLabel='Готовая основа';}});T.ready=T.items.filter(x=>x.status==='ready');T.planned=T.items.filter(x=>x.status!=='ready');T.readyCount=T.ready.length;
+})();
