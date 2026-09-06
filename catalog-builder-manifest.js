@@ -5,6 +5,7 @@ window.RK_CATALOG_BUILDER_SCRIPTS = [
   './catalog-extra-3.js?v=1',
   './catalog-extra-4.js?v=1',
   './catalog-extra-5.js?v=1',
+  './catalog-extra-6.js?v=1',
   './document-taxonomy.js?v=1',
   './document-taxonomy-extra-2.js?v=1',
   './document-taxonomy-extra-3.js?v=1'
