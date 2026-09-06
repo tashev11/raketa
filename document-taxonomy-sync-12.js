@@ -1,0 +1,6 @@
+(function(){
+'use strict';
+const T=window.RKDocumentTaxonomy;if(!T||!Array.isArray(T.items))return;
+const ids=['franchise-disclosure','franchise-application','franchise-intent','franchise-training-act','franchise-launch-act','franchise-audit-act','royalty-report','franchise-marketing-report','franchise-standards','franchise-violation-notice','franchise-territory-addendum','facility-maintenance-contract','facility-inspection-act','maintenance-log','emergency-act','equipment-defect-list','preventive-maintenance-plan','service-request','utility-meter-act','keys-transfer-act','access-list','contractor-permit','cleaning-quality-act','agro-supply-contract','crop-purchase-contract','field-work-act','crop-acceptance-act','grain-storage-act','equipment-rental-agro','agro-service-request','farm-delivery-spec'];
+const set=new Set(ids);T.items.forEach(x=>{if(set.has(x.id)){x.status='ready';x.statusLabel='Готовая основа';}});T.ready=T.items.filter(x=>x.status==='ready');T.planned=T.items.filter(x=>x.status!=='ready');T.readyCount=T.ready.length;
+})();
