@@ -235,7 +235,7 @@
       vals.catalogCountText = allCount.toLocaleString('ru-RU');
       vals.catalogCountNoun = this.plu(allCount, ['вид документа','вида документов','видов документов']);
       vals.readyTemplateCountText = allCount.toLocaleString('ru-RU');
-      vals.readyTemplateCountNoun = this.plu(allCount, ['готовый вариант','готовых варианта','готовых вариантов']);
+      vals.readyTemplateCountNoun = 'шаблонов и отраслевых вариантов документов';
       if (norm(query).length >= 2) {
         vals.searchResults = merged;
         vals.hasSearchResults = merged.length > 0;
