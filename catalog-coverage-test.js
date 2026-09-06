@@ -7,10 +7,14 @@ const initial=[{id:'dogovor-uslug',title:'Договор оказания усл
 class Component{templateCatalog(){return initial;}selectedTemplate(){return this.templateCatalog()[0];}defaultDraftFor(){return{};}renderVals(){return{searchResults:[]};}submitSearch(){}downloadSavedDoc(){}}
 DocBase.install(Component);RK.install(Component);const app=new Component(),list=app.templateCatalog();const ids=list.map(x=>x.id);
 assert.strictEqual(ids.length,new Set(ids).size,'Дубли ID');
-['unpaid-leave','consumer-application','court-power','shortage-act','memo','construction-contract','design-contract','commercial-representation','simple-partnership','trust-management'].forEach(id=>assert(ids.includes(id),'Нет основы '+id));
+['unpaid-leave','consumer-application','court-power','shortage-act','memo','construction-contract','design-contract','commercial-representation','simple-partnership','trust-management','car-sale-contract','route-sheet','payment-schedule','insurance-claim','seller-policy','author-order','content-license','model-release'].forEach(id=>assert(ids.includes(id),'Нет основы '+id));
 assert(Tax.items.find(x=>x.id==='will').status==='notary','Завещание не должно становиться ready');
 assert(Tax.items.find(x=>x.id==='invoice').status==='regulated','Счёт-фактура не должна становиться ready');
+assert(Tax.items.find(x=>x.id==='ks2').status==='regulated','КС-2 должна оставаться регулируемой формой');
+assert(Tax.items.find(x=>x.id==='driver-trip-sheet').status==='regulated','Путевой лист должен оставаться регулируемой формой');
+assert(Tax.items.length>=250,'Ожидалось 250+ видов документов, получено '+Tax.items.length);
+assert(Tax.items.filter(x=>x.status==='ready').length>=140,'Ожидалось 140+ готовых основ, получено '+Tax.items.filter(x=>x.status==='ready').length);
 assert(RK.niches.length>=500,'Ожидалось 500+ ниш, получено '+RK.niches.length);assert(RK.services.length>=450,'Ожидалось 450+ услуг, получено '+RK.services.length);
 ['ophthalmology-clinic','hvac-company','cnc-machining','one-c-integrator','customs-broker'].forEach(slug=>assert(RK.niches.some(x=>x.slug===slug),'Нет ниши '+slug));
 ['hvac-install','cnc-service','one-c-implementation','customs-clearance','financial-audit'].forEach(slug=>assert(RK.services.some(x=>x.slug===slug),'Нет услуги '+slug));
-console.log(JSON.stringify({ok:true,niches:RK.niches.length,services:RK.services.length,documentTypes:Tax.items.length,ready:Tax.items.filter(x=>x.status==='ready').length,baseTemplates:list.length},null,2));
+console.log(JSON.stringify({ok:true,niches:RK.niches.length,services:RK.services.length,documentTypes:Tax.items.length,ready:Tax.items.filter(x=>x.status==='ready').length,baseTemplates:list.length,manifestScripts:manifest.length},null,2));
