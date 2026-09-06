@@ -2,6 +2,7 @@ window.RK_DOCUMENT_SCRIPTS = [
   './catalog-runtime.js?v=3',
   './document-taxonomy.js?v=1',
   './document-taxonomy-extra-2.js?v=1',
+  './document-taxonomy-extra-3.js?v=1',
   './document-base-extra.js?v=1',
   './document-base-extra-2.js?v=1',
   './document-base-extra-3.js?v=1',
