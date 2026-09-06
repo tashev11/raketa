@@ -1,0 +1,17 @@
+window.RK_DOCUMENT_SCRIPTS = [
+  './catalog-runtime.js?v=3',
+  './document-taxonomy.js?v=1',
+  './document-base-extra.js?v=1',
+  './document-base-extra-2.js?v=1',
+  './document-base-extra-3.js?v=1',
+  './document-base-contracts-2.js?v=1',
+  './document-base-corporate-it.js?v=1',
+  './document-base-commerce-claims.js?v=1',
+  './document-base-extra-4.js?v=1',
+  './document-base-general-5.js?v=1',
+  './document-base-general-6.js?v=1',
+  './document-taxonomy-sync.js?v=2',
+  './document-taxonomy-sync-3.js?v=1',
+  './document-taxonomy-sync-2.js?v=2',
+  './document-taxonomy-sync-4.js?v=1'
+];
