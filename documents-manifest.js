@@ -23,6 +23,7 @@ window.RK_DOCUMENT_SCRIPTS = [
   './document-base-industry-13.js?v=1',
   './document-base-industry-14.js?v=1',
   './document-base-industry-15.js?v=1',
+  './document-base-contracts-5.js?v=1',
   './document-taxonomy-sync.js?v=2',
   './document-taxonomy-sync-3.js?v=1',
   './document-taxonomy-sync-2.js?v=2',
@@ -36,5 +37,6 @@ window.RK_DOCUMENT_SCRIPTS = [
   './document-taxonomy-sync-11.js?v=1',
   './document-taxonomy-sync-12.js?v=1',
   './document-taxonomy-sync-13.js?v=1',
-  './document-taxonomy-sync-14.js?v=1'
+  './document-taxonomy-sync-14.js?v=1',
+  './document-taxonomy-sync-15.js?v=1'
 ];
