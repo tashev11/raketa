@@ -92,5 +92,6 @@ window.RK_EXTENSION_SCRIPTS = [
   './document-taxonomy-sync-29.js?v=1',
   './catalog-virtual.js?v=3',
   './catalog-policy.js?v=2',
-  './document-search.js?v=2'
+  './document-search.js?v=2',
+  './guest-access.js?v=1'
 ];
