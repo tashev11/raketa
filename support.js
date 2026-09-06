@@ -7,6 +7,14 @@
   }
   window.DCLogic = DCLogic;
 
+  function syncCatalogMeta() {
+    const description = 'Бесплатные инструменты для малого бизнеса: 200 000+ шаблонов и отраслевых вариантов документов, калькуляторы налогов 2026, НДС и взносов ИП. Всё считается в вашем браузере — данные никуда не уходят.';
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', description);
+    const og = document.querySelector('meta[property="og:description"]');
+    if (og) og.setAttribute('content', description);
+  }
+
   function injectResponsiveCss() {
     if (document.getElementById('rk-runtime-responsive')) return;
     const style = document.createElement('style'); style.id = 'rk-runtime-responsive';
@@ -37,7 +45,7 @@
   function shouldPassEvent(attrEvent) { return attrEvent !== 'click'; }
 
   function boot() {
-    injectResponsiveCss(); const root = document.querySelector('x-dc'); const logicScript = document.querySelector('script[type="text/x-dc"][data-dc-script]'); if (!root || !logicScript) return;
+    syncCatalogMeta(); injectResponsiveCss(); const root = document.querySelector('x-dc'); const logicScript = document.querySelector('script[type="text/x-dc"][data-dc-script]'); if (!root || !logicScript) return;
     const helmet = root.querySelector('helmet'); if (helmet) { Array.from(helmet.childNodes).forEach(function (child) { document.head.appendChild(child); }); helmet.remove(); }
     if (!document.title) document.title = 'Ракета — портал для бизнеса';
     const source = root.innerHTML; const Component = Function('DCLogic', logicScript.textContent + '\nreturn Component;')(DCLogic);
