@@ -11,9 +11,11 @@ window.RK_DOCUMENT_SCRIPTS = [
   './document-base-general-5.js?v=1',
   './document-base-general-6.js?v=1',
   './document-base-contracts-3.js?v=1',
+  './document-base-contracts-4.js?v=1',
   './document-taxonomy-sync.js?v=2',
   './document-taxonomy-sync-3.js?v=1',
   './document-taxonomy-sync-2.js?v=2',
   './document-taxonomy-sync-4.js?v=1',
-  './document-taxonomy-sync-5.js?v=1'
+  './document-taxonomy-sync-5.js?v=1',
+  './document-taxonomy-sync-6.js?v=1'
 ];
