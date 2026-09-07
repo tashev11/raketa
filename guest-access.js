@@ -1,6 +1,44 @@
 (function () {
   'use strict';
 
+  function injectTaxCenterExtra(frame) {
+    if (!frame || !frame.contentDocument) return;
+    try {
+      const doc = frame.contentDocument;
+      if (!doc || doc.getElementById('rk-tax-center-extra')) return;
+      const script = doc.createElement('script');
+      script.id = 'rk-tax-center-extra';
+      script.src = './tax-center-extra.js?v=1';
+      script.defer = true;
+      (doc.head || doc.documentElement).appendChild(script);
+    } catch (error) {
+      console.warn('Raketa tax center extra unavailable', error);
+    }
+  }
+
+  function watchTaxFrames() {
+    const attach = function (frame) {
+      if (!frame || !String(frame.getAttribute('src') || '').includes('nalogi-2026.html')) return;
+      frame.addEventListener('load', function () { injectTaxCenterExtra(frame); }, { once: true });
+      try {
+        if (frame.contentDocument && frame.contentDocument.readyState === 'complete') injectTaxCenterExtra(frame);
+      } catch (error) {}
+    };
+    document.querySelectorAll('iframe[src*="nalogi-2026.html"]').forEach(attach);
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        mutation.addedNodes.forEach(function (node) {
+          if (!node || node.nodeType !== 1) return;
+          if (node.matches && node.matches('iframe[src*="nalogi-2026.html"]')) attach(node);
+          if (node.querySelectorAll) node.querySelectorAll('iframe[src*="nalogi-2026.html"]').forEach(attach);
+        });
+      });
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+  }
+
+  watchTaxFrames();
+
   const RK = window.RKCatalog;
   if (!RK) return;
 
