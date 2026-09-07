@@ -105,5 +105,6 @@ window.RK_EXTENSION_SCRIPTS = [
   './search-intents.js?v=1',
   './home-redesign.js?v=5',
   './search-autocomplete.js?v=2',
-  './search-layout-helper.js?v=1'
+  './search-layout-helper.js?v=1',
+  './search-shortcuts.js?v=1'
 ];
