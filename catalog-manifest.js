@@ -98,5 +98,6 @@ window.RK_EXTENSION_SCRIPTS = [
   './business-services-catalog.js?v=1',
   './service-search.js?v=1',
   './search-intents.js?v=1',
-  './home-redesign.js?v=5'
+  './home-redesign.js?v=5',
+  './search-autocomplete.js?v=1'
 ];
