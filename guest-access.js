@@ -1,19 +1,24 @@
 (function () {
   'use strict';
 
-  function injectTaxCenterExtra(frame) {
+  function injectFrameScript(frame, id, src) {
     if (!frame || !frame.contentDocument) return;
     try {
       const doc = frame.contentDocument;
-      if (!doc || doc.getElementById('rk-tax-center-extra')) return;
+      if (!doc || doc.getElementById(id)) return;
       const script = doc.createElement('script');
-      script.id = 'rk-tax-center-extra';
-      script.src = './tax-center-extra.js?v=1';
+      script.id = id;
+      script.src = src;
       script.defer = true;
       (doc.head || doc.documentElement).appendChild(script);
     } catch (error) {
-      console.warn('Raketa tax center extra unavailable', error);
+      console.warn('Raketa iframe extension unavailable', error);
     }
+  }
+
+  function injectTaxCenterExtra(frame) {
+    injectFrameScript(frame, 'rk-tax-center-extra', './tax-center-extra.js?v=1');
+    injectFrameScript(frame, 'rk-tax-business-affordability', './tax-business-affordability.js?v=1');
   }
 
   function watchTaxFrames() {
