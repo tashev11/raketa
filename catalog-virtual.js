@@ -47,7 +47,11 @@
     return pairs;
   }
 
-  const pairs = buildPairs();
+  let pairsCache = null;
+  function getPairs() {
+    if (!pairsCache) pairsCache = buildPairs();
+    return pairsCache;
+  }
 
   function baseIndex(instance) {
     if (instance._rkBaseIndex) return instance._rkBaseIndex;
@@ -66,9 +70,14 @@
 
   function totalVariants(instance) {
     if (typeof instance._rkVariantTotal === 'number') return instance._rkVariantTotal;
+    const index = baseIndex(instance);
+    const modeCounts = Object.create(null);
+    Object.keys(docsByMode).forEach(function (mode) {
+      modeCounts[mode] = docsByMode[mode].reduce(function (sum, id) { return sum + (index[id] ? 1 : 0); }, 0);
+    });
     let total = 0;
-    pairs.forEach(function (pair) {
-      total += docsFor(instance, pair.service).length * RK.parties.length;
+    getPairs().forEach(function (pair) {
+      total += (modeCounts[pair.service.mode] || modeCounts.service || 0) * RK.parties.length;
     });
     instance._rkVariantTotal = total;
     return total;
@@ -105,6 +114,7 @@
     if (instance._rkResolved[id]) return instance._rkResolved[id];
 
     const index = baseIndex(instance);
+    const pairs = getPairs();
     for (let p = 0; p < pairs.length; p++) {
       const pair = pairs[p];
       const docs = docsByMode[pair.service.mode] || docsByMode.service;
@@ -157,7 +167,7 @@
     const found = [];
     let total = 0;
 
-    pairs.forEach(function (pair) {
+    getPairs().forEach(function (pair) {
       const hasContextTerm = terms.some(function (term) { return pair.search.indexOf(term) !== -1; });
       if (!hasContextTerm) return;
 
@@ -220,8 +230,6 @@
     proto.renderVals = function () {
       const vals = originalRenderVals.call(this);
       const baseCount = this.templateCatalog().length;
-      const variants = totalVariants(this);
-      const allCount = baseCount + variants;
       const query = this.state && this.state.searchQuery ? this.state.searchQuery : '';
       const virtual = searchVirtual(this, query, 18);
       const originalResults = Array.isArray(vals.searchResults) ? vals.searchResults : [];
@@ -232,9 +240,9 @@
       const originalTotal = Number(String(vals.searchSummaryText || '').replace(/\D/g, '')) || originalResults.length;
       const resultTotal = virtual.total + originalTotal;
 
-      vals.catalogCountText = allCount.toLocaleString('ru-RU');
-      vals.catalogCountNoun = this.plu(allCount, ['вид документа','вида документов','видов документов']);
-      vals.readyTemplateCountText = allCount.toLocaleString('ru-RU');
+      vals.catalogCountText = '200 000+';
+      vals.catalogCountNoun = 'шаблонов и отраслевых вариантов документов';
+      vals.readyTemplateCountText = '200 000+';
       vals.readyTemplateCountNoun = 'шаблонов и отраслевых вариантов документов';
       if (norm(query).length >= 2) {
         vals.searchResults = merged;
@@ -245,7 +253,7 @@
         vals.searchMoreText = vals.hasSearchMore ? ('Показаны первые ' + merged.length + ' из ' + resultTotal.toLocaleString('ru-RU') + '. Уточните нишу, услугу или тип документа.') : '';
       }
 
-      RK.meta = {baseTemplates:baseCount,variants:variants,total:allCount,niches:RK.niches.length,services:RK.services.length,parties:RK.parties.length,pairs:pairs.length};
+      RK.meta = {baseTemplates:baseCount,variants:typeof this._rkVariantTotal==='number'?this._rkVariantTotal:null,total:typeof this._rkVariantTotal==='number'?baseCount+this._rkVariantTotal:null,publicTotal:'200 000+',niches:RK.niches.length,services:RK.services.length,parties:RK.parties.length,pairs:pairsCache?pairsCache.length:null};
       return vals;
     };
 
@@ -264,6 +272,14 @@
     };
   }
 
-  RK.virtual = {pairs:pairs,docsByMode:docsByMode,search:searchVirtual,resolve:resolveVariant,totalVariants:totalVariants,materialize:materialize};
+  const virtualApi = {docsByMode:docsByMode,search:searchVirtual,resolve:resolveVariant,totalVariants:totalVariants,materialize:materialize,getPairs:getPairs};
+  Object.defineProperty(virtualApi,'pairs',{get:getPairs});
+  RK.virtual = virtualApi;
   RK.install = install;
+
+  if (typeof window !== 'undefined') {
+    const warm = function () { try { getPairs(); } catch (error) {} };
+    if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(warm,{timeout:4000});
+    else window.setTimeout(warm,2500);
+  }
 })();
