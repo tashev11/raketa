@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tashev11.github.io/raketa/sitemap.xml

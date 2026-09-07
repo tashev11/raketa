@@ -1,0 +1,21 @@
+---
+layout: null
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>{{ site.url }}{{ site.baseurl }}/</loc></url>
+  <url><loc>{{ site.url }}{{ site.baseurl }}/dokumenty.html</loc></url>
+  <url><loc>{{ site.url }}{{ site.baseurl }}/documents.html</loc></url>
+  <url><loc>{{ site.url }}{{ site.baseurl }}/catalog.html</loc></url>
+  <url><loc>{{ site.url }}{{ site.baseurl }}/kalkulyatory.html</loc></url>
+  <url><loc>{{ site.url }}{{ site.baseurl }}/servisy.html</loc></url>
+  <url><loc>{{ site.url }}{{ site.baseurl }}/nalogi-2026.html</loc></url>
+{% for file in site.static_files %}
+{% if file.path contains 'kalkulyatory/calc-' %}
+  <url><loc>{{ site.url }}{{ site.baseurl }}{{ file.path | replace: 'index.html', '' }}</loc></url>
+{% endif %}
+{% if file.path contains 'servisy/service-' %}
+  <url><loc>{{ site.url }}{{ site.baseurl }}{{ file.path | replace: 'index.html', '' }}</loc></url>
+{% endif %}
+{% endfor %}
+</urlset>
