@@ -99,8 +99,10 @@ window.RK_EXTENSION_SCRIPTS = [
   './guest-access.js?v=3',
   './home-directions.js?v=7',
   './business-services-catalog.js?v=1',
+  './business-calculators-catalog.js?v=1',
   './service-search.js?v=1',
+  './calculator-search.js?v=1',
   './search-intents.js?v=1',
   './home-redesign.js?v=5',
-  './search-autocomplete.js?v=1'
+  './search-autocomplete.js?v=2'
 ];
