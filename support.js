@@ -8,7 +8,7 @@
   window.DCLogic = DCLogic;
 
   function syncCatalogMeta() {
-    const description = 'Бесплатные инструменты для малого бизнеса: 200 000+ шаблонов и отраслевых вариантов документов, калькуляторы налогов 2026, НДС и взносов ИП. Всё считается в вашем браузере — данные никуда не уходят.';
+    const description = 'Бесплатные инструменты для малого бизнеса: 200 000+ шаблонов и отраслевых вариантов документов, 276 калькуляторов и 468 сервисов предпринимателя. Всё работает прямо в браузере.';
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute('content', description);
     const og = document.querySelector('meta[property="og:description"]');
@@ -62,9 +62,16 @@
   function loadScript(src) { return new Promise(function (resolve, reject) { const script = document.createElement('script'); script.src = src; script.async = false; script.onload = resolve; script.onerror = reject; document.head.appendChild(script); }); }
   async function start() {
     try {
-      await loadScript('./catalog-manifest.js?v=1');
+      await loadScript('./catalog-manifest.js?v=2');
       const scripts = Array.isArray(window.RK_EXTENSION_SCRIPTS) ? window.RK_EXTENSION_SCRIPTS : [];
-      for (let i = 0; i < scripts.length; i++) await loadScript(scripts[i]);
+      const failures = [];
+      await Promise.all(scripts.map(function (src) {
+        return loadScript(src).catch(function (error) {
+          failures.push(src);
+          console.warn('Raketa extension unavailable:', src, error);
+        });
+      }));
+      if (failures.length) console.warn('Raketa started without ' + failures.length + ' optional extension(s).');
     } catch (error) { console.warn('Raketa catalog runtime unavailable, starting base portal', error); }
     boot();
   }
