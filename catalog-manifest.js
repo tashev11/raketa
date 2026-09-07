@@ -90,11 +90,11 @@ window.RK_EXTENSION_SCRIPTS = [
   './document-taxonomy-sync-27.js?v=1',
   './document-taxonomy-sync-28.js?v=1',
   './document-taxonomy-sync-29.js?v=1',
-  './catalog-virtual.js?v=3',
+  './catalog-virtual.js?v=4',
   './catalog-policy.js?v=2',
   './document-search.js?v=2',
   './guest-access.js?v=3',
-  './home-directions.js?v=5',
+  './home-directions.js?v=6',
   './business-services-catalog.js?v=1',
   './service-search.js?v=1'
 ];
