@@ -247,9 +247,11 @@
     if(input&&input.placeholder!==placeholder) input.placeholder=placeholder;
 
     var original=search.nextElementSibling;
-    if(original&&!original.classList.contains('rk-search-v4-chips')&&original.style.display!=='none') original.style.display='none';
-    var originalNote=original&&original.nextElementSibling;
-    if(originalNote&&!originalNote.classList.contains('rk-search-v4-stats')&&originalNote.style.display!=='none') originalNote.style.display='none';
+    if(original&&!original.classList.contains('rk-search-v4-chips')){
+      if(original.style.display!=='none') original.style.display='none';
+      var originalNote=original.nextElementSibling;
+      if(originalNote&&originalNote.style.display!=='none') originalNote.style.display='none';
+    }
 
     var chips=hero.querySelector('.rk-search-v4-chips');
     if(!chips){
