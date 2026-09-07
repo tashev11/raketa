@@ -97,6 +97,6 @@ window.RK_EXTENSION_SCRIPTS = [
   './home-directions.js?v=7',
   './business-services-catalog.js?v=1',
   './service-search.js?v=1',
-  './home-redesign.js?v=2',
+  './home-redesign.js?v=3',
   './home-redesign-actions.js?v=1'
 ];
