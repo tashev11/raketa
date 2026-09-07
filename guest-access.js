@@ -17,6 +17,7 @@
   }
 
   function injectTaxCenterExtra(frame) {
+    injectFrameScript(frame, 'rk-tax-rules-2026', './tax-rules-2026.js?v=1');
     injectFrameScript(frame, 'rk-tax-center-extra', './tax-center-extra.js?v=2');
     injectFrameScript(frame, 'rk-tax-business-affordability', './tax-business-affordability.js?v=2');
     injectFrameScript(frame, 'rk-tax-center-extra-2', './tax-center-extra-2.js?v=1');
