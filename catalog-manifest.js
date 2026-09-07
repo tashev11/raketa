@@ -104,5 +104,6 @@ window.RK_EXTENSION_SCRIPTS = [
   './calculator-search.js?v=1',
   './search-intents.js?v=1',
   './home-redesign.js?v=5',
-  './search-autocomplete.js?v=2'
+  './search-autocomplete.js?v=2',
+  './search-layout-helper.js?v=1'
 ];
