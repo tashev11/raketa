@@ -93,5 +93,5 @@ window.RK_EXTENSION_SCRIPTS = [
   './catalog-virtual.js?v=3',
   './catalog-policy.js?v=2',
   './document-search.js?v=2',
-  './guest-access.js?v=1'
+  './guest-access.js?v=3'
 ];
