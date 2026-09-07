@@ -16,7 +16,7 @@ RK.install=function(Component){
    let score=0;if(s.title.toLowerCase()===q)score+=100;if(s.title.toLowerCase().includes(q))score+=50;words.forEach(w=>{if(s.title.toLowerCase().includes(w))score+=15;else if(hay.includes(w))score+=5});return{s,cat,score};
   }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,8);
   if(!matches.length)return vals;
-  const extra=matches.map(x=>({kind:'Сервис',title:x.s.title,desc:x.s.description,meta:(x.cat?.title||'Сервисы')+' · '+(SC.types[x.s.type]||''),href:'./servisy.html?service='+encodeURIComponent(x.s.id),templateId:'',toolTab:''}));
+  const extra=matches.map(x=>({kind:'Сервис',title:x.s.title,desc:x.s.description,meta:(x.cat?.title||'Сервисы')+' · '+(SC.types[x.s.type]||''),href:'./servisy.html',templateId:'',toolTab:''}));
   const existing=Array.isArray(vals.searchResults)?vals.searchResults.slice():[];
   vals.searchResults=existing.concat(extra).slice(0,16);
   vals.hasSearchResults=vals.searchResults.length>0;
