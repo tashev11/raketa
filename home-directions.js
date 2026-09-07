@@ -1,6 +1,20 @@
 (function(){
   'use strict';
 
+  function normalizeHero(hero){
+    var heroTitle=hero&&hero.querySelector('h1');
+    if(!heroTitle) return;
+    var countSpan=heroTitle.querySelector('span');
+    var tail=' шаблонов и отраслевых вариантов документов · 276 калькуляторов · 468 сервисов';
+    var desired='200 000+'+tail;
+    if(heroTitle.textContent.replace(/\s+/g,' ').trim()===desired) return;
+    if(countSpan){
+      countSpan.textContent='200 000+';
+      Array.from(heroTitle.childNodes).forEach(function(node){if(node!==countSpan) node.remove();});
+      heroTitle.appendChild(document.createTextNode(tail));
+    }
+  }
+
   function restoreDirections(){
     var tools=document.getElementById('rk-tools');
     var heroSearch=document.getElementById('rk-herosearch');
@@ -9,22 +23,19 @@
     var hero=heroSearch.parentElement;
     if(!hero) return false;
 
+    normalizeHero(hero);
+
     tools.style.display='block';
     tools.style.visibility='visible';
     tools.style.opacity='1';
     tools.style.padding='20px 24px 0';
     tools.style.margin='0 auto';
 
-    var heroTitle=hero.querySelector('h1');
-    if(heroTitle&&heroTitle.innerHTML.indexOf('6 калькуляторов')!==-1){
-      heroTitle.innerHTML=heroTitle.innerHTML.replace('6 калькуляторов','276 калькуляторов');
-    }
-
     var description='Бесплатные инструменты для малого бизнеса: 200 000+ шаблонов и отраслевых вариантов документов, 276 калькуляторов и 468 рабочих сервисов предпринимателя. Финансы, продажи, CRM, кадры, налоги, закупки, маркетинг, склад и аналитика.';
     var meta=document.querySelector('meta[name="description"]');
     var og=document.querySelector('meta[property="og:description"]');
-    if(meta) meta.setAttribute('content',description);
-    if(og) og.setAttribute('content',description);
+    if(meta&&meta.getAttribute('content')!==description) meta.setAttribute('content',description);
+    if(og&&og.getAttribute('content')!==description) og.setAttribute('content',description);
 
     var list=document.getElementById('rk-toollist');
     if(list){
