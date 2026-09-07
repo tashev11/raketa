@@ -94,5 +94,7 @@ window.RK_EXTENSION_SCRIPTS = [
   './catalog-policy.js?v=2',
   './document-search.js?v=2',
   './guest-access.js?v=3',
-  './home-directions.js?v=5'
+  './home-directions.js?v=5',
+  './business-services-catalog.js?v=1',
+  './service-search.js?v=1'
 ];
