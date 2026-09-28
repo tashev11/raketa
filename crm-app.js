@@ -339,7 +339,7 @@ function init(){
  document.getElementById('crm-nav').addEventListener('click',function(e){var b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
  document.getElementById('crm-modal').addEventListener('click',function(e){if(e.target.id==='crm-modal')closeModal()});
  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
- seedDemo();render();
+ render();
 }
 init();
 })();
